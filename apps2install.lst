@@ -1,0 +1,49 @@
+# required
+flatpak
+wget
+curl
+git
+
+# network
+autofs
+
+# requirements for shell and prompt
+bash
+bash-completion
+#borgbackup-bash-completion
+#chezmoi-bash-completion
+#cpustat-bash-completion
+#distrobox-bash-completion
+#eza-bash-completion
+#fd-bash-completion
+#fzf-bash-completion
+#pdfgrep-bash-completion
+#ripgrep-bash-completion
+#whois-bash-completion
+#yt-dlp-bash-complet
+tar
+bat
+bat-bash-completion
+tree
+multitail
+fastfetch
+wget
+unzip
+fontconfig
+
+# micro
+micro-editor
+micro
+
+# tools
+btop
+#lsd
+#eza
+#exa
+ShellCheck
+
+# fonts
+fetchmsttfonts
+fira-code-fonts
+
+# end

@@ -1,0 +1,45 @@
+# security
+com.github.tchx84.Flatseal
+
+# browsers
+org.mozilla.firefox
+com.google.Chrome
+
+# development
+com.vscodium.codium
+#io.github.shiftey.Desktop # Github Desktop not required as vscodium has github integration by default
+
+# e-mail
+org.mozilla.Thunderbird
+
+# chat
+org.signal.Signal
+
+# tools
+com.github.qarmin.czkawka
+org.kde.akregator
+org.nmap.Zenmap
+org.remmina.Remmina
+
+# audio & video
+com.spotify.Client
+org.freac.freac
+org.musicbrainz.Picard
+org.videolan.VLC
+
+# download
+io.github.aandrew_me.ytdn
+
+# note taking
+md.obsidian.Obsidian    
+
+# GTK theme
+org.gtk.Gtk3theme.Breeze
+
+# KDE
+org.kde.digikam
+org.kde.elisa
+
+# KDE games
+org.kde.kmahjongg
+org.kde.knights
