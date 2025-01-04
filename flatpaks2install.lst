@@ -7,7 +7,6 @@ com.google.Chrome
 
 # development
 com.vscodium.codium
-#io.github.shiftey.Desktop # Github Desktop not required as vscodium has github integration by default
 
 # e-mail
 org.mozilla.Thunderbird
