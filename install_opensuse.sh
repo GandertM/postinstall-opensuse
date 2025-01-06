@@ -29,6 +29,16 @@ is_opensuse_package_installed() {
     rpm -q "$package" > /dev/null 2>&1 # doesn't not work
 }
 
+update_System() {
+  # Update repositories
+  log_message "INFO" "Updating repositories..."
+  sudo zypper refresh || log_message "ERROR" "Failed to update repositories"
+
+  # System update
+  log_message "INFO" "Performing system update..."
+  sudo zypper update -y || log_message "ERROR" "Failed to update system"
+}
+
 install_Starship() {
     if app_exists starship; then
         log_message "INFO" "Starship already installed"
@@ -206,6 +216,7 @@ install_Font() {
 }
 
 main() {
+  update_System
   install_Apps
   remove_Apps
   install_Flathub
@@ -220,14 +231,6 @@ main() {
 # Create a pre-installation snapshot with snapper
 log_message "INFO" "Creating pre-installation snapshot..."
 sudo snapper create -d "Pre-installation snapshot" || log_message "ERROR" "Failed to create pre-installation snapshot"
-
-# Update repositories
-log_message "INFO" "Updating repositories..."
-sudo zypper refresh || log_message "ERROR" "Failed to update repositories"
-
-# System update
-log_message "INFO" "Performing system update..."
-sudo zypper update -y || log_message "ERROR" "Failed to update system"
 
 # Run main
 main
