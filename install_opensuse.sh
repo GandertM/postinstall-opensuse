@@ -17,18 +17,6 @@ log_message() {
   echo "$(date '+%Y-%m-%d %H:%M:%S') [$LEVEL] $MESSAGE" >> "$LOGFILE"
 }
 
-# Create a pre-installation snapshot with snapper
-log_message "INFO" "Creating pre-installation snapshot..."
-sudo snapper create -d "Pre-installation snapshot" || log_message "ERROR" "Failed to create pre-installation snapshot"
-
-# Update repositories
-log_message "INFO" "Updating repositories..."
-sudo zypper refresh || log_message "ERROR" "Failed to update repositories"
-
-# System update
-log_message "INFO" "Performing system update..."
-sudo zypper update -y || log_message "ERROR" "Failed to update system"
-
 # Check if package is installed
 app_exists() {
     command -v "$1" >/dev/null 2>&1
@@ -40,6 +28,51 @@ is_opensuse_package_installed() {
     #app_exists "$package" > /dev/null 2>&1  # error on micro-editor; will reinstall
     rpm -q "$package" > /dev/null 2>&1 # doesn't not work
 }
+
+install_Starship() {
+    if app_exists starship; then
+        log_message "INFO" "Starship already installed"
+        return
+    fi
+
+    if ! curl -sS https://starship.rs/install.sh | sh; then
+        log_message "ERROR" "Something went wrong during starship install!"
+        exit 1
+    fi
+}    
+
+install_Fzf() {    
+    if app_exists fzf; then
+        log_message "INFO" "Fzf already installed"
+    else
+        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+        ~/.fzf/install
+    fi
+}
+
+install_Zoxide() {
+    if app_exists zoxide; then
+        log_message "INFO" "Zoxide already installed"
+        return
+    fi
+
+    if ! curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh; then
+        log_message "ERROR" "Something went wrong during zoxide install!"
+        exit 1
+    fi
+}
+
+# Create a pre-installation snapshot with snapper
+log_message "INFO" "Creating pre-installation snapshot..."
+sudo snapper create -d "Pre-installation snapshot" || log_message "ERROR" "Failed to create pre-installation snapshot"
+
+# Update repositories
+log_message "INFO" "Updating repositories..."
+sudo zypper refresh || log_message "ERROR" "Failed to update repositories"
+
+# System update
+log_message "INFO" "Performing system update..."
+sudo zypper update -y || log_message "ERROR" "Failed to update system"
 
 # Install applications listed in apps2install.lst
 if [[ -f "apps2install.lst" ]]; then
@@ -139,6 +172,40 @@ if [[ -f "flatpaks2remove.lst" ]]; then
 else
   log_message "INFO" "No flatpaks2remove.lst file found."
 fi
+
+# Install font 'MesloLGS Nerd Font Mono'
+FONT_NAME="MesloLGS Nerd Font Mono"
+if fc-list :family | grep -iq "$FONT_NAME"; then
+    log_message "INFO" "Font '$FONT_NAME' is installed."
+else
+    log_message "INFO" "Installing font '$FONT_NAME'"
+    
+    # Change this URL to correspond with the correct font
+    FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip"
+    FONT_DIR="$HOME/.local/share/fonts"
+    
+    # check if the file is accessible
+    if wget -q --spider "$FONT_URL"; then
+      TEMP_DIR=$(mktemp -d)
+      wget -q --show-progress $FONT_URL -O "$TEMP_DIR"/"${FONT_NAME}".zip
+      unzip "$TEMP_DIR"/"${FONT_NAME}".zip -d "$TEMP_DIR"
+      mkdir -p "$FONT_DIR"/"$FONT_NAME"
+      mv "${TEMP_DIR}"/*.ttf "$FONT_DIR"/"$FONT_NAME"
+    
+      # Update the font cache
+      fc-cache -fv
+    
+      # Delete the files created from this
+      rm -rf "${TEMP_DIR}"
+      log_message "INFO" "'$FONT_NAME' installed successfully."
+    else
+      log_message "ERROR" "Font '$FONT_NAME' not installed. Font URL is not accessible."
+    fi
+fi
+
+install_Fzf
+install_Starship
+install_Zoxide
 
 # Create a post-installation snapshot with snapper
 log_message "INFO" "Creating post-installation snapshot..."
