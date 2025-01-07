@@ -29,7 +29,7 @@ is_opensuse_package_installed() {
     rpm -q "$package" > /dev/null 2>&1 # doesn't not work
 }
 
-update_System() {
+update_system() {
   # Update repositories
   log_message "INFO" "Updating repositories..."
   sudo zypper refresh || log_message "ERROR" "Failed to update repositories"
@@ -39,40 +39,48 @@ update_System() {
   sudo zypper update -y || log_message "ERROR" "Failed to update system"
 }
 
-install_Starship() {
-    if app_exists starship; then
-        log_message "INFO" "Starship already installed"
-        return
-    fi
+install_starship() {
+  log_message "----" "Install starship."
 
-    if ! curl -sS https://starship.rs/install.sh | sh; then
-        log_message "ERROR" "Something went wrong during starship install!"
-        exit 1
-    fi
+  if app_exists starship; then
+    log_message "INFO" "Starship already installed"
+    return
+  fi
+
+  if ! curl -sS https://starship.rs/install.sh | sh; then
+    log_message "ERROR" "Something went wrong during starship install!"
+    exit 1
+  fi
 }    
 
-install_Fzf() {    
-    if app_exists fzf; then
-        log_message "INFO" "Fzf already installed"
-    else
-        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-        ~/.fzf/install
-    fi
+install_fzf() {
+  log_message "----" "Install fzf."
+
+  if app_exists fzf; then
+    log_message "INFO" "Fzf already installed"
+  else
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install
+  fi
 }
 
-install_Zoxide() {
-    if app_exists zoxide; then
-        log_message "INFO" "Zoxide already installed"
-        return
-    fi
+install_zoxide() {
+  log_message "----" "Install zoxide."
 
-    if ! curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh; then
-        log_message "ERROR" "Something went wrong during zoxide install!"
-        exit 1
-    fi
+  if app_exists zoxide; then
+    log_message "INFO" "Zoxide already installed"
+    return
+  fi
+
+  if ! curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh; then
+    log_message "ERROR" "Something went wrong during zoxide install!"
+    exit 1
+  fi
 }
 
-install_Apps() {
+install_apps() {
+  log_message "----" "Install apps."
+
   # Install applications listed in apps2install.lst
   if [[ -f "apps2install.lst" ]]; then
     while IFS= read -r app || [[ -n "$app" ]]; do
@@ -99,7 +107,9 @@ install_Apps() {
   fi
 }
 
-remove_Apps() {
+remove_apps() {
+  log_message "----" "Remove apps."
+
   # Remove applications listed in apps2remove.lst
   if [[ -f "apps2remove.lst" ]]; then
     while IFS= read -r app || [[ -n "$app" ]]; do
@@ -124,7 +134,9 @@ remove_Apps() {
   fi
 }
 
-install_Flathub() {
+install_flathub() {
+  log_message "----" "Install flathub."
+
   # Install the Flathub repository if not already installed
   log_message "INFO" "Checking for Flathub repository..."
   if flatpak remote-list | grep -q "flathub"; then
@@ -135,7 +147,9 @@ install_Flathub() {
   fi
 }
 
-install_Flatpaks() {
+install_flatpaks() {
+  log_message "----" "Install flatpaks."
+
   # Install flatpaks listed in flatpaks2install.lst
   if [[ -f "flatpaks2install.lst" ]]; then
     while IFS= read -r flatpak || [[ -n "$flatpak" ]]; do
@@ -159,7 +173,9 @@ install_Flatpaks() {
   fi
 }
 
-remove_Flatpaks() {
+remove_flatpaks() {
+  log_message "----" "Remove flatpaks."
+
   # Remove flatpaks listed in flatpaks2remove.lst
   if [[ -f "flatpaks2remove.lst" ]]; then
     while IFS= read -r flatpak || [[ -n "$flatpak" ]]; do
@@ -183,7 +199,9 @@ remove_Flatpaks() {
   fi
 }
 
-install_Font() {
+install_font() {
+  log_message "----" "Install font."
+
   # Install font 'MesloLGS Nerd Font Mono'
   FONT_NAME="MesloLGS Nerd Font Mono"
   if fc-list :family | grep -iq "$FONT_NAME"; then
@@ -215,17 +233,37 @@ install_Font() {
   fi
 }
 
+install_projects() {
+  log_message "----" "Install projects."
+  local DIR_PROJECTS="$HOME/Projects"
+
+  cd "$HOME"
+
+  if [[ ! -d "$DIR_PROJECTS" ]]; then
+    mkdir -p "$DIR_PROJECTS"
+    cd "$DIR_PROJECTS"
+    git clone https://github.com/GandertM/postinstall.git
+    git clone https://github.com/GandertM/postinstall-opensuse.git
+    cd "$HOME"
+    log_message "INFO" "Projects installed successfully."
+  else
+    log_message "INFO" "Projects are already installed, skipping installation."
+    return
+  fi 
+}
+
 main() {
-  update_System
-  install_Apps
-  remove_Apps
-  install_Flathub
-  install_Flatpaks
-  remove_Flatpaks
-  install_Font
-  install_Fzf
-  install_Starship
-  install_Zoxide
+  update_system
+  install_apps
+  remove_apps
+  install_flathub
+  install_flatpaks
+  remove_flatpaks
+  install_font
+  install_fzf
+  install_starship
+  install_zoxide
+  install_projects
 }
 
 # Create a pre-installation snapshot with snapper
