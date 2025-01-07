@@ -7,8 +7,8 @@ if ! sudo -v &>/dev/null; then
 fi
 
 # Create a timestamp for the log file name
-TIMESTAMP=$(date '+%Y-%m-%d_%H-%M-%S')
-LOGFILE="install_${TIMESTAMP}.log"
+TIMESTAMP=$(date '+%Y-%m-%d-%H-%M-%S')
+LOGFILE="install-${TIMESTAMP}.log"
 
 # Function to log messages
 log_message() {
