@@ -29,6 +29,10 @@ fontconfig
 # micro
 micro-editor
 
+# desktop
+plank
+yakuake
+
 # tools
 btop
 ShellCheck
@@ -36,6 +40,7 @@ tealdeer
 ripgrep
 pdfgrep
 yt-dlp
+syncthing
 
 # fonts
 fetchmsttfonts

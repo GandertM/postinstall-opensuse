@@ -20,6 +20,9 @@ org.kde.akregator
 org.nmap.Zenmap
 org.remmina.Remmina
 
+# backup
+com.borgbase.Vorta
+
 # audio & video
 com.spotify.Client
 org.freac.freac
