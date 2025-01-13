@@ -17,6 +17,7 @@ org.signal.Signal
 # tools
 com.github.qarmin.czkawka
 org.kde.akregator
+org.kde.ark
 org.nmap.Zenmap
 org.remmina.Remmina
 
