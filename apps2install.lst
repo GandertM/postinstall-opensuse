@@ -8,15 +8,7 @@ git
 autofs
 
 # requirements for shell and prompt
-bash
-bash-completion
-#borgbackup-bash-completion
-#chezmoi-bash-completion
-#cpustat-bash-completion
-#distrobox-bash-completion
-#fd-bash-completion
-#fzf-bash-completion
-#whois-bash-completion
+zsh
 tar
 bat
 tree
