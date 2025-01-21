@@ -20,6 +20,7 @@ org.kde.akregator
 org.kde.ark
 org.nmap.Zenmap
 org.remmina.Remmina
+com.rustdesk.RustDesk
 
 # backup
 com.borgbase.Vorta
