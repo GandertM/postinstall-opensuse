@@ -3,7 +3,8 @@ com.github.tchx84.Flatseal
 
 # browsers
 org.mozilla.firefox
-com.google.Chrome
+#com.google.Chrome
+io.github.ungoogled_software.ungoogled_chromium
 
 # development
 com.vscodium.codium
@@ -21,6 +22,7 @@ org.kde.ark
 org.nmap.Zenmap
 org.remmina.Remmina
 com.rustdesk.RustDesk
+io.github.giantpinkrobots.varia
 
 # backup
 com.borgbase.Vorta
