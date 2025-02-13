@@ -252,8 +252,24 @@ install_projects() {
   fi 
 }
 
+install_codecs() {
+  log_message "----" "Install codecs."
+
+  # install packman-essentials
+  sudo zypper ar -cfp 90 'https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_$releasever/Essentials' packman-essentials
+  sudo zypper dup --from packman-essentials --allow-vendor-change
+
+  # install codecs
+  sudo zypper install --allow-vendor-change --from packman-essentials ffmpeg gstreamer-plugins-{good,bad,ugly,libav} libavcodec vlc-codecs
+}
+
+install_chezmoi() {
+  log_message "----" "Install chezmoi."
+  sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply GandertM
+}
+
 main() {
-  update_system
+  #update_system
   install_apps
   remove_apps
   install_flathub
@@ -264,6 +280,8 @@ main() {
   install_starship
   install_zoxide
   install_projects
+  install_codecs
+  install_chezmoi
 }
 
 # Create a pre-installation snapshot with snapper
