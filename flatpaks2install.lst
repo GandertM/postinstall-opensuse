@@ -22,7 +22,6 @@ org.kde.ark
 org.nmap.Zenmap
 org.remmina.Remmina
 com.rustdesk.RustDesk
-io.github.giantpinkrobots.varia
 
 # backup
 com.borgbase.Vorta
