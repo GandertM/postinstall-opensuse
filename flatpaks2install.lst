@@ -35,6 +35,8 @@ org.videolan.VLC
 
 # download
 io.github.aandrew_me.ytdn
+io.freetubeapp.FreeTube
+io.github.giantpinkrobots.varia
 
 # note taking
 md.obsidian.Obsidian    
