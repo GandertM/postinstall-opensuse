@@ -6,12 +6,14 @@ io.github.flattool.Warehouse
 org.mozilla.firefox
 #com.google.Chrome
 io.github.ungoogled_software.ungoogled_chromium
+app.zen_browser.zen
 
 # development
 com.vscodium.codium
 
 # e-mail
 org.mozilla.Thunderbird
+eu.betterbird.Betterbird
 
 # chat
 org.signal.Signal
