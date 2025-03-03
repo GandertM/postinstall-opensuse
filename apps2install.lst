@@ -6,6 +6,7 @@ git
 
 # network
 autofs
+net-tools-deprecated
 
 # requirements for shell and prompt
 zsh
@@ -25,6 +26,7 @@ micro-editor
 plank
 yakuake
 plasma-vault
+plasma5-firewall
 
 # tools
 btop
