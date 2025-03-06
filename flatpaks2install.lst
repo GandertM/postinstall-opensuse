@@ -18,6 +18,9 @@ eu.betterbird.Betterbird
 # chat
 org.signal.Signal
 
+# passwords
+org.keepassxc.KeePassXC
+
 # tools
 com.github.qarmin.czkawka
 org.kde.akregator
@@ -41,7 +44,8 @@ io.freetubeapp.FreeTube
 io.github.giantpinkrobots.varia
 
 # note taking
-md.obsidian.Obsidian    
+md.obsidian.Obsidian
+org.kde.klevernotes
 
 # GTK theme
 org.gtk.Gtk3theme.Breeze
@@ -49,7 +53,6 @@ org.gtk.Gtk3theme.Breeze
 # KDE
 org.kde.digikam
 org.kde.elisa
-org.kde.klevernotes
 
 # KDE games
 org.kde.kmahjongg

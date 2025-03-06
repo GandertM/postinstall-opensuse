@@ -36,6 +36,7 @@ ripgrep
 pdfgrep
 yt-dlp
 syncthing
+barrier
 
 # fonts
 fetchmsttfonts
