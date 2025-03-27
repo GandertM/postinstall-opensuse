@@ -40,6 +40,16 @@ barrier
 zip
 eza
 
+# krusader dependencies
+kget
+kompare
+krename
+7zip
+lha
+unrar
+unzip
+zip
+
 # fonts
 fetchmsttfonts
 fira-code-fonts
