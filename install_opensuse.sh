@@ -14,7 +14,9 @@ LOGFILE="install-${TIMESTAMP}.log"
 log_message() {
   LEVEL=$1
   MESSAGE=$2
-  echo "$(date '+%Y-%m-%d %H:%M:%S') [$LEVEL] $MESSAGE" >> "$LOGFILE"
+  PADDING="      "
+  #echo "$(date '+%Y-%m-%d %H:%M:%S') [$LEVEL] $MESSAGE" >> "$LOGFILE"
+  printf "%s%s %s\n" "${padding:${#[$LEVEL]}}" "$MESSAGE" >> "$LOGFILE"
 }
 
 # Check if package is installed on OpenSUSE
@@ -97,7 +99,7 @@ install_apps() {
           log_message "INFO" "$app_name is already installed, skipping installation."
         else
           log_message "INFO" "Installing $app_name..."
-          sudo zypper install -y "$app_name" && log_message "INFO" "$app_name installed successfully." || log_message "ERROR" "Failed to install $app_name."
+          sudo zypper install -y "$app_name" && log_message "INSTALL" "$app_name installed successfully." || log_message "ERROR" "Failed to install $app_name."
         fi
       done
     done < "apps2install.lst"
@@ -122,7 +124,7 @@ remove_apps() {
         #if zypper se -i "$app_name" &>/dev/null; then
         if app_exists "$app_name"; then
           log_message "INFO" "Removing $app_name..."
-          sudo zypper remove -y "$app_name" && log_message "INFO" "$app_name removed successfully." || log_message "ERROR" "Failed to remove $app_name."
+          sudo zypper remove -y "$app_name" && log_message "REMOVE" "$app_name removed successfully." || log_message "ERROR" "Failed to remove $app_name."
         else
           log_message "INFO" "$app_name is not installed, skipping removal."
         fi
@@ -163,7 +165,7 @@ install_flatpaks() {
           log_message "INFO" "$flatpak_name is already installed, skipping installation."
         else
           log_message "INFO" "Installing $flatpak_name..."
-          flatpak install --user -y flathub "$flatpak_name" && log_message "INFO" "$flatpak_name installed successfully." || log_message "ERROR" "Failed to install $flatpak_name."
+          flatpak install --user -y flathub "$flatpak_name" && log_message "INSTALL" "$flatpak_name installed successfully." || log_message "ERROR" "Failed to install $flatpak_name."
         fi
       done
     done < "flatpaks2install.lst"
@@ -187,7 +189,7 @@ remove_flatpaks() {
       for flatpak_name in "${flatpaks[@]}"; do
         if flatpak list --app | grep -q "$flatpak_name"; then
           log_message "INFO" "Removing $flatpak_name..."
-          flatpak uninstall -y "$flatpak_name" && log_message "INFO" "$flatpak_name removed successfully." || log_message "ERROR" "Failed to remove $flatpak_name."
+          flatpak uninstall -y "$flatpak_name" && log_message "REMOVE" "$flatpak_name removed successfully." || log_message "ERROR" "Failed to remove $flatpak_name."
         else
           log_message "INFO" "$flatpak_name is not installed, skipping removal."
         fi
