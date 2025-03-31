@@ -17,16 +17,15 @@ log_message() {
   echo "$(date '+%Y-%m-%d %H:%M:%S') [$LEVEL] $MESSAGE" >> "$LOGFILE"
 }
 
-# Check if package is installed
+# Check if package is installed on OpenSUSE
 app_exists() {
-    command -v "$1" >/dev/null 2>&1
+    command -v "$1" >/dev/null 2>&1 || rpm -q "$1" > /dev/null 2>&1
 }
 
 # Function to check if a program is installed on OpenSUSE
 is_opensuse_package_installed() {
     local package="$1"
-    #app_exists "$package" > /dev/null 2>&1  # error on micro-editor; will reinstall
-    rpm -q "$package" > /dev/null 2>&1 # doesn't not work
+    app_exists "$package"
 }
 
 update_system() {
@@ -94,7 +93,7 @@ install_apps() {
       for app_name in "${apps[@]}"; do
         
         #if zypper se -i "$app_name" &>/dev/null; then
-        if is_opensuse_package_installed "$app_name"; then
+        if app_exists "$app_name"; then
           log_message "INFO" "$app_name is already installed, skipping installation."
         else
           log_message "INFO" "Installing $app_name..."
@@ -121,7 +120,7 @@ remove_apps() {
       apps=($app)  # Split the line by spaces into an array
       for app_name in "${apps[@]}"; do
         #if zypper se -i "$app_name" &>/dev/null; then
-        if is_opensuse_package_installed "$app_name"; then
+        if app_exists "$app_name"; then
           log_message "INFO" "Removing $app_name..."
           sudo zypper remove -y "$app_name" && log_message "INFO" "$app_name removed successfully." || log_message "ERROR" "Failed to remove $app_name."
         else
