@@ -23,10 +23,10 @@ app_exists() {
 }
 
 # Function to check if a program is installed on OpenSUSE
-is_opensuse_package_installed() {
-    local package="$1"
-    app_exists "$package"
-}
+#is_opensuse_package_installed() {
+#    local package="$1"
+#    app_exists "$package"
+#}
 
 update_system() {
   # Update repositories
