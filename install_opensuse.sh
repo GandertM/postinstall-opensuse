@@ -14,9 +14,8 @@ LOGFILE="install-${TIMESTAMP}.log"
 log_message() {
   LEVEL=$1
   MESSAGE=$2
-  PADDING="      "
-  #echo "$(date '+%Y-%m-%d %H:%M:%S') [$LEVEL] $MESSAGE" >> "$LOGFILE"
-  printf "%s%s %s\n" "${padding:${#[$LEVEL]}}" "$MESSAGE" >> "$LOGFILE"
+  NOW=$(date '+%Y-%m-%d %H:%M:%S')
+  printf "%s [%-8s] %s\n" "$NOW" "$LEVEL" "$MESSAGE" >> "$LOGFILE"
 }
 
 # Check if package is installed on OpenSUSE
@@ -41,7 +40,7 @@ update_system() {
 }
 
 install_starship() {
-  log_message "----" "Install starship."
+  log_message "-------" "Install starship."
 
   if app_exists starship; then
     log_message "INFO" "Starship already installed"
@@ -55,7 +54,7 @@ install_starship() {
 }    
 
 install_fzf() {
-  log_message "----" "Install fzf."
+  log_message "-------" "Install fzf."
 
   if app_exists fzf; then
     log_message "INFO" "Fzf already installed"
@@ -66,7 +65,7 @@ install_fzf() {
 }
 
 install_zoxide() {
-  log_message "----" "Install zoxide."
+  log_message "-------" "Install zoxide."
 
   if app_exists zoxide; then
     log_message "INFO" "Zoxide already installed"
@@ -80,7 +79,7 @@ install_zoxide() {
 }
 
 install_apps() {
-  log_message "----" "Install apps."
+  log_message "-------" "Install apps."
 
   # Install applications listed in apps2install.lst
   if [[ -f "apps2install.lst" ]]; then
@@ -109,7 +108,7 @@ install_apps() {
 }
 
 remove_apps() {
-  log_message "----" "Remove apps."
+  log_message "-------" "Remove apps."
 
   # Remove applications listed in apps2remove.lst
   if [[ -f "apps2remove.lst" ]]; then
@@ -136,7 +135,7 @@ remove_apps() {
 }
 
 install_flathub() {
-  log_message "----" "Install flathub."
+  log_message "-------" "Install flathub."
 
   # Install the Flathub repository if not already installed
   log_message "INFO" "Checking for Flathub repository..."
@@ -149,7 +148,7 @@ install_flathub() {
 }
 
 install_flatpaks() {
-  log_message "----" "Install flatpaks."
+  log_message "-------" "Install flatpaks."
 
   # Install flatpaks listed in flatpaks2install.lst
   if [[ -f "flatpaks2install.lst" ]]; then
@@ -175,7 +174,7 @@ install_flatpaks() {
 }
 
 remove_flatpaks() {
-  log_message "----" "Remove flatpaks."
+  log_message "-------" "Remove flatpaks."
 
   # Remove flatpaks listed in flatpaks2remove.lst
   if [[ -f "flatpaks2remove.lst" ]]; then
@@ -201,7 +200,7 @@ remove_flatpaks() {
 }
 
 install_font() {
-  log_message "----" "Install font."
+  log_message "-------" "Install font."
 
   # Install font 'MesloLGS Nerd Font Mono'
   FONT_NAME="MesloLGS Nerd Font Mono"
@@ -235,7 +234,7 @@ install_font() {
 }
 
 install_projects() {
-  log_message "----" "Install projects."
+  log_message "-------" "Install projects."
   local DIR_PROJECTS="$HOME/Projects"
 
   cd "$HOME"
@@ -254,7 +253,7 @@ install_projects() {
 }
 
 install_codecs() {
-  log_message "----" "Install codecs."
+  log_message "-------" "Install codecs."
 
   # install packman-essentials
   sudo zypper ar -cfp 90 'https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_$releasever/Essentials' packman-essentials
@@ -265,38 +264,38 @@ install_codecs() {
 }
 
 install_chezmoi() {
-  log_message "----" "Install chezmoi."
+  log_message "-------" "Install chezmoi."
   sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply GandertM
 }
 
 main() {
   #update_system
   install_apps
-  remove_apps
-  install_flathub
-  install_flatpaks
-  remove_flatpaks
-  install_font
-  install_fzf
-  install_starship
-  install_zoxide
-  install_projects
-  install_codecs
-  install_chezmoi
+  #remove_apps
+  #install_flathub
+  #install_flatpaks
+  #remove_flatpaks
+  #install_font
+  #install_fzf
+  #install_starship
+  #install_zoxide
+  #install_projects
+  #install_codecs
+  #install_chezmoi
 }
 
 # Create a pre-installation snapshot with snapper
-log_message "INFO" "Creating pre-installation snapshot..."
+log_message "SNAPSHOT" "Creating pre-installation snapshot..."
 sudo snapper create -d "Pre-installation snapshot" || log_message "ERROR" "Failed to create pre-installation snapshot"
 
 # Run main
 main
 
 # Create a post-installation snapshot with snapper
-log_message "INFO" "Creating post-installation snapshot..."
+log_message "SNAPSHOT" "Creating post-installation snapshot..."
 sudo snapper create -d "Post-installation snapshot" || log_message "ERROR" "Failed to create post-installation snapshot"
 
 # Recommend reboot
-log_message "INFO" "System installation and removals are complete. It's recommended to reboot the system."
+log_message "-------" "System installation and removals are complete. It's recommended to reboot the system."
 
 exit 0
