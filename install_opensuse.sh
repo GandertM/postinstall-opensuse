@@ -19,7 +19,7 @@ log_message() {
 
 # Check if package is installed on OpenSUSE
 app_exists() {
-    command -v "$1" >/dev/null 2>&1 || rpm -q "$1" > /dev/null 2>&1
+    command -v "$1" > /dev/null 2>&1 || rpm -q "$1" > /dev/null 2>&1
 }
 
 # Function to check if a program is installed on OpenSUSE
