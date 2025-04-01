@@ -15,7 +15,7 @@ log_message() {
   LEVEL=$1
   MESSAGE=$2
   NOW=$(date '+%Y-%m-%d %H:%M:%S')
-  printf "%s [%-8s] %s\n" "$NOW" "$LEVEL" "$MESSAGE" >> "$LOGFILE"
+  printf "%s | %-8s | %s\n" "$NOW" "$LEVEL" "$MESSAGE" >> "$LOGFILE"
 }
 
 # Check if package is installed on OpenSUSE
