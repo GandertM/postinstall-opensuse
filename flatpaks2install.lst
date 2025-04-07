@@ -45,7 +45,7 @@ io.github.giantpinkrobots.varia
 
 # note taking
 md.obsidian.Obsidian
-org.kde.klevernotes
+# org.kde.klevernotes # crashes
 
 # GTK theme
 org.gtk.Gtk3theme.Breeze
