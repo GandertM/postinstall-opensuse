@@ -268,6 +268,43 @@ install_chezmoi() {
   sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply GandertM
 }
 
+install_mc_theme() {
+  log_message "-------" "Install Midnight Commander theme."
+  local DIR_MC_THEME="$HOME/.local/share/mc/skins/"
+  local DIR_DOWNLOAD="$HOME/Downloads/mctheme"
+
+  cd "$HOME"
+
+  if [[ ! -d "$DIR_MC_THEME" ]]; then
+    mkdir -p "$DIR_MC_THEME"
+  
+    if [[ ! -d "$DIR_DOWNLOAD" ]]; then
+      mkdir -p "$DIR_DOWNLOAD"
+    fi
+
+    cd "$DIR_DOWNLOAD"
+    git clone https://github.com/dracula/midnight-commander.git
+    cd "./midnight-commander/skins/"
+    cp *.ini "$DIR_MC_THEME"
+    cd "$HOME"
+    log_message "INFO" "Midnight Commander theme installed successfully."
+    
+  else
+    log_message "INFO" "Midnight Commander theme is already installed, skipping installation."
+    return
+  fi
+
+  cd "$DIR_DOWNLOAD"
+
+    git clone https://github.com/dracula/midnight-commander.git
+    cd "$HOME"
+    log_message "INFO" "Projects installed successfully."
+  else
+    log_message "INFO" "Projects are already installed, skipping installation."
+    return
+  fi 
+}
+
 main() {
   #update_system
   install_apps
