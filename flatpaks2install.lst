@@ -53,6 +53,7 @@ org.gtk.Gtk3theme.Breeze
 # KDE
 org.kde.digikam
 org.kde.elisa
+org.kde.kcolorchooser
 
 # KDE games
 org.kde.kmahjongg
