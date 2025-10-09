@@ -18,6 +18,7 @@ fastfetch
 wget
 unzip
 fontconfig
+mlocate
 
 # micro
 micro-editor
@@ -54,5 +55,9 @@ zip
 # fonts
 fetchmsttfonts
 fira-code-fonts
+
+# Mozilla
+MozillaFirefox
+MozillaThunderbird
 
 # end
