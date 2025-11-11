@@ -28,6 +28,7 @@ org.kde.ark
 org.nmap.Zenmap
 org.remmina.Remmina
 com.rustdesk.RustDesk
+io.github.sigmasd.stimulator
 
 # backup
 com.borgbase.Vorta
@@ -45,6 +46,7 @@ io.github.giantpinkrobots.varia
 
 # note taking
 md.obsidian.Obsidian
+com.logseq.Logseq
 # org.kde.klevernotes # crashes
 
 # GTK theme
@@ -58,3 +60,9 @@ org.kde.kcolorchooser
 # KDE games
 org.kde.kmahjongg
 org.kde.knights
+
+# office
+org.onlyoffice.desktopeditors
+
+# others
+com.calibre_ebook.calibre
