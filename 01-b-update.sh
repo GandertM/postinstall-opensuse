@@ -6,13 +6,13 @@ TIMESTAMP=$(date '+%Y-%m-%d-%H-%M-%S')
 LOGFILE="$HOME/install-01-${TIMESTAMP}.log"
 
 # source functions
-source ./core/system_functions.sh
+source ./core/system-functions.sh
 
 # Verify it is loaded 
-if [ $? -ne 0 ]; then
-  log_message "ERROR" "Error sourcing functions"
-  exit 1
-fi
+#if [[ $? -ne 0 ]]; then
+#  log_message "ERROR" "Error sourcing functions"
+#  exit 1
+#fi
 
 log_message "FILE" "Start $(basename "$0")"
 #sudo_check

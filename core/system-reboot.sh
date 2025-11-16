@@ -1,17 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail  # Safe bash scripting: exit on error, unset var, or pipe fail
 
-# Reboot file
-CHECK_FILE="$HOME/install-01-system-reboot.log"
-
-# Reboot system
-# condition: run only on first pass!
-if [[ -f "$CHECK_FILE" ]]; then
-    log_message "SKIPPING" "Skipping reboot"
-    rm "$CHECK_FILE"
-    exit 1
-else
-    log_message "REBOOT" "Rebooting system..."
-    touch "$CHECK_FILE"
-    sudo systemctl reboot now && log_message "SUCCESS" "Rebooting system..." || log_message "ERROR" "Rebooting system..."
-if
+# Reboot system if required
+if [ -x /usr/bin/needs-restarting ]; then
+	needs-restarting -r
+	if [ $? -eq 1 ] ; then
+        log_message "REBOOT" "Rebooting system..."
+        sudo systemctl reboot now || log_message "ERROR" "Rebooting system"
+    else
+        log_message "SKIPPING" "Reboot not required; skipping reboot"
+    fi
+fi
