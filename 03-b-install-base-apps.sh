@@ -43,7 +43,7 @@ install_apps() {
         "autofs"
         "net-tools-deprecated"
     )
-
+##
     # required for Mozilla
     APPS_LIST+=(
         "MozillaFirefox"

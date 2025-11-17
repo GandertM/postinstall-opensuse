@@ -10,7 +10,7 @@ log_message() {
 }
 
 # Check sudo
-sudo_check() {
+check_sudo() {
     # Check if the user has sudo rights
     if ! sudo -v &>/dev/null; then
         echo "$(date '+%Y-%m-%d %H:%M:%S') ERROR User does not have sudo rights"
@@ -19,7 +19,7 @@ sudo_check() {
 }
 
 # Check current user B
-user_b_check() {
+check_user_b() {
     # Get the current username
     USER_NAME="$USER"
     BASE_LETTER="b"   
@@ -37,7 +37,7 @@ user_b_check() {
 }
 
 # Check current user K
-user_k_check() {
+check_user_k() {
     # Get the current username
     USER_NAME="$USER"
     BASE_LETTER="k"   
@@ -55,7 +55,7 @@ user_k_check() {
 }
 
 # Check current user C
-user_c_check() {
+check_user_c() {
     # Get the current username
     USER_NAME="$USER"
     BASE_LETTER="c"
@@ -82,3 +82,47 @@ flatpak_exists() {
     flatpak list | grep "$1" > /dev/null 2>&1
 }
 
+install_app() {
+    APP="$1"  
+              
+    if app_exists "$APP"; then
+        log_message "INFO" "$APP is already installed, skipping installation."
+    else
+        log_message "INFO" "Installing $APP..."
+        sudo zypper --non-interactive install "$APP" && log_message "INSTALL" "$APP installed successfully." || log_message "ERROR" "Failed to install $APP."
+    fi
+}
+
+install_app_interactive() {
+    APP="$1"  
+              
+    if app_exists "$APP"; then
+        log_message "INFO" "$APP is already installed, skipping installation."
+    else
+        log_message "INFO" "Installing $APP..."
+        sudo zypper install "$APP" && log_message "INSTALL" "$APP installed successfully." || log_message "ERROR" "Failed to install $APP."
+    fi
+}
+
+install_app_repo() {
+    REPO="$1"
+    APP="$2"
+    
+    if zypper lr | grep -q "$REPO"; then
+        log_message "INFO" "Installing $APP from $REPO..."
+        sudo zypper --non-interactive install --allow-vendor-change --from "$REPO" "$APP" && log_message "INSTALL" "$APP installed successfully." || log_message "ERROR" "Failed to install $app_name."
+    else
+        log_message "ERROR" "Installing $APP from $REPO failed. Repository not present."
+    fi
+}
+
+remove_app() {
+    APP="$1" 
+
+    if app_exists "$APP"; then
+        log_message "INFO" "Removing $APP..."
+        sudo zypper remove -y "$APP" && log_message "REMOVE" "$APP removed successfully." || log_message "ERROR" "Failed to remove $APP."
+    else
+        log_message "INFO" "$APP is not installed, skipping removal."
+    fi
+}

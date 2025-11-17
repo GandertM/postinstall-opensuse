@@ -15,9 +15,15 @@ source ./core/system-functions.sh
 #fi
 
 log_message "FILE" "Start $(basename "$0")"
-#sudo_check
-#user_b_check
+
+check_sudo
+
+check_user_b
+
 source ./core/system-refresh.sh
+
 source ./core/system-update.sh
+
 source ./core/system-reboot.sh
+
 log_message "FILE" "End $(basename "$0")"
