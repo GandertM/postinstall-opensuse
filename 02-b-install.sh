@@ -5,96 +5,103 @@ set -euo pipefail  # Safe bash scripting: exit on error, unset var, or pipe fail
 TIMESTAMP=$(date '+%Y-%m-%d-%H-%M-%S')
 LOGFILE="$HOME/install-02-${TIMESTAMP}.log"
 
-# source functions
-source ./core/system-functions.sh
+# source release and functions
+[[ -f /etc/os-release ]] && source /etc/os-release || log_message "ERROR" "Failed to source file os-release"
+[[ -f ./core/system-functions.sh ]] && source ./core/system-functions.sh || log_message "ERROR" "Failed to source file system-functions.sh"
 
 check_sudo
     
 check_user_b
 
 # add repositories
-source ./repos/repo-add-packman-essentials.sh
-source ./repos/repo-add-utilities.sh
+[[ -f ./repos/repo-add-packman-essentials.sh ]] && source ./repos/repo-add-packman-essentials.sh || log_message "ERROR" "Failed to source file repo-add-packman-essentials.sh"
+[[ -f ./repos/repo-add-utilities.sh]] && source ./repos/repo-add-utilities.sh || log_message "ERROR" "Failed to source file repo-add-utilities.sh"
+[[ -f ./repos/repo-add-flathub-user.sh]] && source ./repos/repo-add-flathub-user.sh || log_message "ERROR" "Failed to source file repo-add-flathub-user.sh"
 
 # refresh repositories
-source ./core/system-refresh.sh
+[[ -f ./core/system-refresh.sh ]] && source ./core/system-refresh.sh || log_message "ERROR" "Failed to source file system-refresh.sh"
 
 # required for all
-source ./apps/app-install-wget.sh
-source ./apps/app-install-curl.sh
-source ./apps/app-install-git.sh
-source ./apps/app-install-flatpak.sh
+install_app "wget"
+install_app "curl"
+install_app "git"
+install_app "flatpak"
 
 # required for shell
-source ./apps/app-install-zsh.sh
-source ./apps/app-install-tar.sh
-source ./apps/app-install-bat.sh
-source ./apps/app-install-tree.sh
-source ./apps/app-install-fastfetch.sh
-source ./apps/app-install-unzip.sh
-source ./apps/app-install-fontconfig.sh
-source ./apps/app-install-mlocate.sh
-source ./apps/app-install-htop.sh
-source ./apps/app-install-stow.sh
-source ./apps/app-install-wine.sh
-
-# system
-source ./apps/app-install-cockpit.sh
+install_app "zsh"
+install_app "tar"
+install_app "bat"
+install_app "tree"
+install_app "fastfetch"
+install_app "unzip"
+install_app "fontconfig"
+install_app "mlocate"
+install_app "htop"
+install_app "stow"
+install_app "wine"
 
 # required for network
-source ./apps/app-install-autofs.sh
+install_app "autofs"
 source ./apps/app-install-net-tools-deprecated.sh
 
 # Mozilla
-source ./apps/app-install-MozillaFirefox.sh
-source ./apps/app-install-MozillaThunderbird.sh
+install_app "MozillaFirefox"
+install_app "MozillaThunderbird"
 
-# micro
-source ./apps/app-install-micro-editor.sh
+# editor
+install_app "micro-editor"
 
 # required for desktop
-source ./apps/app-install-yakuake.sh
-source ./apps/app-install-plasma-vault.sh
+install_app "yakuake"
+install_app "plasma-vault"
 
 # tools
-source ./apps/app-install-btop.sh
-source ./apps/app-install-ShellCheck.sh
-source ./apps/app-install-yt-dlp.sh
-source ./apps/app-install-syncthing.sh
-source ./apps/app-install-barrier.sh
-source ./apps/app-install-zip.sh
-source ./apps/app-install-eza.sh
-source ./apps/app-install-gdu.sh
-source ./apps/app-install-xkill.sh
-source ./apps/app-install-mc.sh
-source ./apps/app-install-partitionmanager.sh
+install_app "btop"
+install_app "ShellCheck"
+#source ./apps/app-install-yt-dlp.sh  # not in default repo's anymore
+#install_app "yt-dlp" # not in default repo's anymore
+install_app "syncthing"
+install_app "barrier"
+install_app "zip"
+install_app "eza"
+install_app "gdu"
+install_app "xkill"
+install_app "mc"
+install_app "partitionmanager"
 
 # required for krusader
-source ./apps/app-install-kget.sh
-source ./apps/app-install-kompare.sh
-source ./apps/app-install-krename.sh
-source ./apps/app-install-7zip.sh
-source ./apps/app-install-lha.sh
-source ./apps/app-install-unrar.sh
-source ./apps/app-install-unzip.sh
-source ./apps/app-install-zip.sh
+install_app "kget"
+install_app "kompare"
+install_app "krename"
+install_app "7zip"
+install_app "lha"
+install_app "unrar"
+install_app "unzip"
+install_app "zip"
 
 # from utilities
-source ./apps/app-install-repo-trash-cli.sh
-source ./apps/app-install-repo-fzf.sh
-source ./apps/app-install-repo-zoxide.sh
-source ./apps/app-install-repo-tealdeer.sh
-source ./apps/app-install-repo-multitail.sh
-source ./apps/app-install-repo-ripgrep.sh
+install_app "trash-cli" "utilities"
+install_app "fzf" "utilities"
+install_app "zoxide" "utilities"
+install_app "tealdeer" "utilities"
+install_app "multitail" "utilities"
+install_app "ripgrep" "utilities"
 
 # from packman-essentials
-source ./apps/app-install-repo-ffmpeg.sh
-source ./apps/app-install-repo-gstreamer-plugins-good.sh
-source ./apps/app-install-repo-gstreamer-plugins-bad.sh
-source ./apps/app-install-repo-gstreamer-plugins-ugly.sh
-source ./apps/app-install-repo-gstreamer-plugins-libav.sh
-source ./apps/app-install-repo-libavcodec.sh
-source ./apps/app-install-repo-vlc-codecs.sh
+install_app "ffmpeg" "packman-essentials"
+install_app "gstreamer-plugins-good" "packman-essentials"
+install_app "gstreamer-plugins-bad" "packman-essentials"
+install_app "gstreamer-plugins-ugly" "packman-essentials"
+install_app "gstreamer-plugins-libav" "packman-essentials"
+install_app "libavcodec" "packman-essentials"
+install_app "vlc-codecs" "packman-essentials"
+
+# required for system
+#source ./apps/app-install-cockpit.sh  # use flatpak org.cockpit_project.CockpitClient / config not required
+install_flatpak_user "org.cockpit_project.CockpitClient"
+
+# speed up grub
+set_grub
 
 # check if reboot is required
-source ./core/system-reboot.sh
+[[ -f ./core/system-reboot.sh ]] && source ./core/system-reboot.sh || log_message "ERROR" "Failed to source file system-reboot.sh"

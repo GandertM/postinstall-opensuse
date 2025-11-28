@@ -4,7 +4,7 @@ set -euo pipefail  # Safe bash scripting: exit on error, unset var, or pipe fail
 
 # -----------------------------------
 # installing an application 
-# from repo utilities
+# from repo 
 # usage: 1. repo 2. app
 # -----------------------------------
 

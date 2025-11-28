@@ -6,11 +6,7 @@ set -euo pipefail  # Safe bash scripting: exit on error, unset var, or pipe fail
 # adding flathub per user
 # -----------------------------------
 
-log_message "-------" "Install flathub."
-
-# Install the Flathub repository if not already installed
-log_message "INFO" "Checking for Flathub repository..."
-
+# install the flathub repository if not already installed
 if flatpak remote-list --user | grep -q "flathub"; then
     log_message "INFO" "Flathub repository is already installed, skipping."
 else

@@ -13,7 +13,7 @@ fi
 # Only run dist-upgrade (dup) on Slowroll or Tumbleweed
 log_message "UPDATE" "Updating system..."
 if echo "$ID" | grep -qiE 'tumbleweed|slowroll'; then
-    sudo zypper dup && log_message "SUCCESS" "Distro-Updating system..." || log_message "ERROR" "Failed to update '""$ID""'"
+    sudo zypper --non-interactive dup && log_message "SUCCESS" "Distro-Updating system..." || log_message "ERROR" "Failed to update '""$ID""'"
 else
-    sudo zypper up && log_message "SUCCESS" "Updating system..." || log_message "ERROR" "Failed to update '""$ID""'"
+    sudo zypper --non-interactive up && log_message "SUCCESS" "Updating system..." || log_message "ERROR" "Failed to update '""$ID""'"
 fi
