@@ -262,16 +262,18 @@ install_dotfiles() {
     local DIR_DOTS="$HOME/.dotfiles"
     cd "$HOME"
     if [[ ! -d "$DIR_DOTS" ]]; then
+        
         mkdir -p "$DIR_DOTS"
-    fi
+    
+        git clone https://github.com/GandertM/dotfiles.git "$DIR_DOTS"
 
-    git clone https://github.com/GandertM/dotfiles.git "$DIR_DOTS"
+        if test $? -eq 0; then
+            log_message "INFO" "Dotfiles cloned successfully."
+        else
+            log_message "ERROR" "Dotfiles not cloned."
+            exit 1
+        fi
 
-    if test $? -eq 0; then
-        log_message "INFO" "Dotfiles cloned successfully."
-    else
-        log_message "ERROR" "Dotfiles not cloned."
-        exit 1
     fi
 
 }
@@ -316,27 +318,28 @@ install_projects() {
     cd "$HOME"
     if [[ ! -d "$DIR_PROJECTS" ]]; then
         mkdir -p "$DIR_PROJECTS"
-    fi
-    cd "$DIR_PROJECTS"
     
-    git clone https://github.com/GandertM/postinstall.git
+        cd "$DIR_PROJECTS"
+    
+        git clone https://github.com/GandertM/postinstall.git
 
-    if test $? -eq 0; then
-        log_message "INFO" "Project 'postinstall' installed successfully."
-    else
-        log_message "ERROR" "Project 'postinstall' not installed."
-        exit 1
+        if test $? -eq 0; then
+            log_message "INFO" "Project 'postinstall' installed successfully."
+        else
+            log_message "ERROR" "Project 'postinstall' not installed."
+            exit 1
+        fi
+
+        git clone https://github.com/GandertM/postinstall-opensuse.git
+    
+        if test $? -eq 0; then
+            log_message "INFO" "Project 'postinstall-opensuse' installed successfully."
+        else
+            log_message "ERROR" "Project 'postinstall-opensuse' not installed."
+            exit 1
+        fi
     fi
 
-    git clone https://github.com/GandertM/postinstall-opensuse.git
-    
-    if test $? -eq 0; then
-        log_message "INFO" "Project 'postinstall-opensuse' installed successfully."
-    else
-        log_message "ERROR" "Project 'postinstall-opensuse' not installed."
-        exit 1
-    fi
-    
     cd "$HOME"
 }
 
