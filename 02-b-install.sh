@@ -9,6 +9,20 @@ LOGFILE="$HOME/install-02-${TIMESTAMP}.log"
 # source distro and functions
 # ----------------------------------------
 
+if [ -f ./core/system-functions.sh ]; then
+    
+    # source functions
+    source ./core/system-functions.sh
+
+    if test $? -eq 0; then
+        log_message "INFO" "Function sourced successfully"
+    else
+        log_message "ERROR" "Error sourcing functions"
+        exit 1
+    fi
+
+fi
+
 if [ -f /etc/os-release ]; then
 
     # source release    
@@ -23,19 +37,6 @@ if [ -f /etc/os-release ]; then
 
 fi
 
-if [ -f ./core/system-functions.sh ]; then
-    
-    # source functions
-    source ./core/system-functions.sh
-
-    if test $? -eq 0; then
-        log_message "INFO" "Function sourced successfully"
-    else
-        log_message "ERROR" "Error sourcing functions"
-        exit 1
-    fi
-
-fi
 
 # ----------------------------------------
 # basis checks

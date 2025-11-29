@@ -9,20 +9,6 @@ LOGFILE="$HOME/install-04-${TIMESTAMP}.log"
 # source distro and functions
 # ----------------------------------------
 
-if [ -f /etc/os-release ]; then
-
-    # source release    
-    source /etc/os-release
-
-    if test $? -eq 0; then
-        log_message "INFO" "Detected: '""$PRETTY_NAME""'"
-    else
-        log_message "ERROR" "Failed to detect openSUSE version"
-        exit 1
-    fi
-
-fi
-
 if [ -f ./core/system-functions.sh ]; then
     
     # source functions
@@ -32,6 +18,20 @@ if [ -f ./core/system-functions.sh ]; then
         log_message "INFO" "Function sourced successfully"
     else
         log_message "ERROR" "Error sourcing functions"
+        exit 1
+    fi
+
+fi
+
+if [ -f /etc/os-release ]; then
+
+    # source release    
+    source /etc/os-release
+
+    if test $? -eq 0; then
+        log_message "INFO" "Detected: '""$PRETTY_NAME""'"
+    else
+        log_message "ERROR" "Failed to detect openSUSE version"
         exit 1
     fi
 
