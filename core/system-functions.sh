@@ -103,7 +103,7 @@ install_app() {
     REPO="${2:-""}"
 
     # when an app is provided, but no repo (use default repo)
-    if [[ -n "$1" ]] && [[ -z "$2" ]]; then
+    if [[ -n "$1" ]] && [[ -z "${2:-""}" ]]; then
         if app_exists "$APP"; then
             log_message "INFO" "$APP is already installed, skipping installation."
         else
@@ -113,7 +113,7 @@ install_app() {
     fi
 
     # when an app and a repo is provided (use specific repo with vendor change for the app, if repo not present use default repo)
-    if [[ -n "$1" ]] && [[ -n "$2" ]]; then
+    if [[ -n "$1" ]] && [[ -n "${2:-""}" ]]; then
         if repo_exists "$REPO"; then
             log_message "INFO" "Installing $APP from $REPO..."
             sudo zypper --non-interactive install --allow-vendor-change --from "$REPO" "$APP" && log_message "INSTALL" "$APP installed successfully." || log_message "ERROR" "Failed to install $APP from $REPO."
@@ -126,10 +126,10 @@ install_app() {
 
 install_app_interactive() {
     APP="$1"  
-    REPO="$2"
+    REPO="${2:-""}"
 
     # when an app is provided, but no repo (use default repo)
-    if [[ -n "$1" ]] && [[ -z "$2" ]]; then
+    if [[ -n "$1" ]] && [[ -z "${2:-""}" ]]; then
         if app_exists "$APP"; then
             log_message "INFO" "$APP is already installed, skipping installation."
         else
@@ -139,7 +139,7 @@ install_app_interactive() {
     fi
 
     # when an app and a repo is provided (use specific repo with vendor change for the app, if repo not present use default repo)
-    if [[ -n "$1" ]] && [[ -n "$2" ]]; then
+    if [[ -n "$1" ]] && [[ -n "${2:-""}" ]]; then
         if repo_exists "$REPO"; then
             log_message "INFO" "Installing $APP from $REPO..."
             sudo zypper install --allow-vendor-change --from "$REPO" "$APP" && log_message "INSTALL" "$APP installed successfully." || log_message "ERROR" "Failed to install $APP from $REPO."
