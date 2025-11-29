@@ -5,21 +5,118 @@ set -euo pipefail  # Safe bash scripting: exit on error, unset var, or pipe fail
 TIMESTAMP=$(date '+%Y-%m-%d-%H-%M-%S')
 LOGFILE="$HOME/install-02-${TIMESTAMP}.log"
 
-# source release and functions
-[[ -f /etc/os-release ]] && source /etc/os-release || log_message "ERROR" "Failed to source file os-release"
-[[ -f ./core/system-functions.sh ]] && source ./core/system-functions.sh || log_message "ERROR" "Failed to source file system-functions.sh"
+# ----------------------------------------
+# source distro and functions
+# ----------------------------------------
+
+if [ -f /etc/os-release ]; then
+
+    # source release    
+    source /etc/os-release
+
+    if test $? -eq 0; then
+        log_message "INFO" "Detected: '""$PRETTY_NAME""'"
+    else
+        log_message "ERROR" "Failed to detect openSUSE version"
+        exit 1
+    fi
+
+fi
+
+if [ -f ./core/system-functions.sh ]; then
+    
+    # source functions
+    source ./core/system-functions.sh
+
+    if test $? -eq 0; then
+        log_message "INFO" "Function sourced successfully"
+    else
+        log_message "ERROR" "Error sourcing functions"
+        exit 1
+    fi
+
+fi
+
+# ----------------------------------------
+# basis checks
+# ----------------------------------------
 
 check_sudo
     
 check_user_b
 
+# ----------------------------------------
 # add repositories
-[[ -f ./repos/repo-add-packman-essentials.sh ]] && source ./repos/repo-add-packman-essentials.sh || log_message "ERROR" "Failed to source file repo-add-packman-essentials.sh"
-[[ -f ./repos/repo-add-utilities.sh]] && source ./repos/repo-add-utilities.sh || log_message "ERROR" "Failed to source file repo-add-utilities.sh"
-[[ -f ./repos/repo-add-flathub-user.sh]] && source ./repos/repo-add-flathub-user.sh || log_message "ERROR" "Failed to source file repo-add-flathub-user.sh"
+# ----------------------------------------
 
+# add repository - packman-essentials
+if [ -f ./repos/repo-add-packman-essentials.sh ]; then
+    
+    # source refresh
+    source ./repos/repo-add-packman-essentials.sh
+
+    if test $? -eq 0; then
+        log_message "INFO" "repo-add-packman-essentials.sh sourced successfully"
+    else
+        log_message "ERROR" "Failed to source file repo-add-packman-essentials.sh"
+        exit 1
+    fi
+
+fi
+
+# add repository - utilities
+if [ -f ./repos/repo-add-utilities.sh ]; then
+    
+    # source refresh
+    source ./repos/repo-add-utilities.sh
+
+    if test $? -eq 0; then
+        log_message "INFO" "repo-add-utilities.sh sourced successfully"
+    else
+        log_message "ERROR" "Failed to source file repo-add-utilities.sh"
+        exit 1
+    fi
+
+fi
+
+# add repository - flathub-user
+if [ -f ./repos/repo-add-flathub-user.sh ]; then
+    
+    # source refresh
+    source ./repos/repo-add-flathub-user.sh
+
+    if test $? -eq 0; then
+        log_message "INFO" "repo-add-flathub-user.sh sourced successfully"
+    else
+        log_message "ERROR" "Failed to source file repo-add-flathub-user.sh"
+        exit 1
+    fi
+
+fi
+
+
+# ----------------------------------------
 # refresh repositories
-[[ -f ./core/system-refresh.sh ]] && source ./core/system-refresh.sh || log_message "ERROR" "Failed to source file system-refresh.sh"
+# ----------------------------------------
+
+if [ -f ./core/system-refresh.sh ]; then
+    
+    # source refresh
+    source ./core/system-refresh.sh
+
+    if test $? -eq 0; then
+        log_message "INFO" "Refresh sourced successfully"
+    else
+        log_message "ERROR" "Error sourcing refresh"
+        exit 1
+    fi
+
+fi
+
+
+# ----------------------------------------
+# install apps
+# ----------------------------------------
 
 # required for all
 install_app "wget"
@@ -96,12 +193,39 @@ install_app "gstreamer-plugins-libav" "packman-essentials"
 install_app "libavcodec" "packman-essentials"
 install_app "vlc-codecs" "packman-essentials"
 
+
+# ----------------------------------------
+# install flatpaks
+# ----------------------------------------
+
 # required for system
 #source ./apps/app-install-cockpit.sh  # use flatpak org.cockpit_project.CockpitClient / config not required
 install_flatpak_user "org.cockpit_project.CockpitClient"
 
+
+# ----------------------------------------
+# config
+# ----------------------------------------
+
 # speed up grub
 set_grub
 
+
+# ----------------------------------------
+# reboot
+# ----------------------------------------
+
 # check if reboot is required
-[[ -f ./core/system-reboot.sh ]] && source ./core/system-reboot.sh || log_message "ERROR" "Failed to source file system-reboot.sh"
+if [ -f ./core/system-reboot.sh ]; then
+    
+    # source refresh
+    source ./core/system-reboot.sh
+
+    if test $? -eq 0; then
+        log_message "INFO" "Reboot sourced successfully"
+    else
+        log_message "ERROR" "Error sourcing reboot"
+        exit 1
+    fi
+
+fi

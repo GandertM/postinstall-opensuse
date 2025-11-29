@@ -5,19 +5,85 @@ set -euo pipefail  # Safe bash scripting: exit on error, unset var, or pipe fail
 TIMESTAMP=$(date '+%Y-%m-%d-%H-%M-%S')
 LOGFILE="$HOME/install-03-${TIMESTAMP}.log"
 
-# source release and functions
-[[ -f /etc/os-release ]] && source /etc/os-release || log_message "ERROR" "Failed to source file os-release"
-[[ -f ./core/system-functions.sh ]] && source ./core/system-functions.sh || log_message "ERROR" "Failed to source file system-functions.sh"
+# ----------------------------------------
+# source distro and functions
+# ----------------------------------------
+
+if [ -f /etc/os-release ]; then
+
+    # source release    
+    source /etc/os-release
+
+    if test $? -eq 0; then
+        log_message "INFO" "Detected: '""$PRETTY_NAME""'"
+    else
+        log_message "ERROR" "Failed to detect openSUSE version"
+        exit 1
+    fi
+
+fi
+
+if [ -f ./core/system-functions.sh ]; then
+    
+    # source functions
+    source ./core/system-functions.sh
+
+    if test $? -eq 0; then
+        log_message "INFO" "Function sourced successfully"
+    else
+        log_message "ERROR" "Error sourcing functions"
+        exit 1
+    fi
+
+fi
+
+
+# ----------------------------------------
+# basis checks
+# ----------------------------------------
 
 check_sudo
     
 check_user_k
 
-# add repositories
-[[ -f ./repos/repo-add-flathub-user.sh]] && source ./repos/repo-add-flathub-user.sh || log_message "ERROR" "Failed to source file repo-add-flathub-user.sh"
 
+# ----------------------------------------
+# add repositories
+# ----------------------------------------
+
+# add repository - flathub-user
+if [ -f ./repos/repo-add-flathub-user.sh ]; then
+    
+    # source refresh
+    source ./repos/repo-add-flathub-user.sh
+
+    if test $? -eq 0; then
+        log_message "INFO" "repo-add-flathub-user.sh sourced successfully"
+    else
+        log_message "ERROR" "Failed to source file repo-add-flathub-user.sh"
+        exit 1
+    fi
+
+fi
+
+
+# ----------------------------------------
 # refresh repositories
-[[ -f ./core/system-refresh.sh ]] && source ./core/system-refresh.sh || log_message "ERROR" "Failed to source file system-refresh.sh"
+# ----------------------------------------
+
+if [ -f ./core/system-refresh.sh ]; then
+    
+    # source refresh
+    source ./core/system-refresh.sh
+
+    if test $? -eq 0; then
+        log_message "INFO" "Refresh sourced successfully"
+    else
+        log_message "ERROR" "Error sourcing refresh"
+        exit 1
+    fi
+
+fi
 
 
 # -------------------------------------
@@ -60,7 +126,7 @@ install_flatpak_user "md.obsidian.Obsidian"
 install_flatpak_user "com.logseq.Logseq"
 
 # GTK theme
-install_flatpak_user "org.gtk.Gtk3theme.Breeze
+install_flatpak_user "org.gtk.Gtk3theme.Breeze"
 
 # KDE
 install_flatpak_user "org.kde.digikam"
@@ -102,13 +168,21 @@ create_directories() {
     cd "$HOME"
 
     # actual creation
-    for DIR in "${DIR_LIST[@]}"; do
+    for DIR in "${DIR_LIST[@]}" ; do
         
         if [[ -d "$DIR" ]]; then
             log_message "INFO" "$DIR exists, skipping creation."
         else
             log_message "INFO" "Creating $DIR..."
-            mkdir -p "$DIR" && log_message "CREATE" "$DIR created successfully." || log_message "ERROR" "Failed to create $DIR."
+            
+            mkdir -p "$DIR"
+
+            if test $? -eq 0; then
+                log_message "CREATE" "$DIR created successfully."
+            else
+                log_message "ERROR" "Failed to create $DIR."
+                exit 1
+            fi
         fi
         
     done
@@ -190,7 +264,16 @@ install_dotfiles() {
     if [[ ! -d "$DIR_DOTS" ]]; then
         mkdir -p "$DIR_DOTS"
     fi
-    git clone https://github.com/GandertM/dotfiles.git "$DIR_DOTS" && log_message "INFO" "Dotfiles cloned successfully." || log_message "ERROR" "Dotfiles not cloned."
+
+    git clone https://github.com/GandertM/dotfiles.git "$DIR_DOTS"
+
+    if test $? -eq 0; then
+        log_message "INFO" "Dotfiles cloned successfully."
+    else
+        log_message "ERROR" "Dotfiles not cloned."
+        exit 1
+    fi
+
 }
 
 stow_dotfiles() {
@@ -212,8 +295,16 @@ stow_dotfiles() {
     for APP in "${STOW_LIST[@]}"; do
         
         log_message "INFO" "Creating $APP..."
-        stow "$APP" && log_message "INFO" "$APP stowed successfully." || log_message "ERROR" "$APP not stowed."
-       
+        
+        stow "$APP"
+
+        if test $? -eq 0; then
+            log_message "INFO" "$APP stowed successfully."
+        else
+            log_message "ERROR" "$APP not stowed."
+            exit 1
+        fi
+
     done
 
     cd "$HOME"
@@ -227,8 +318,25 @@ install_projects() {
         mkdir -p "$DIR_PROJECTS"
     fi
     cd "$DIR_PROJECTS"
-    git clone https://github.com/GandertM/postinstall.git && log_message "INFO" "Project 'postinstall' installed successfully." || log_message "ERROR" "Project 'postinstall' not installed."
-    git clone https://github.com/GandertM/postinstall-opensuse.git && log_message "INFO" "Project 'postinstall-opensuse' installed successfully." || log_message "ERROR" "Project 'postinstall-opensuse' not installed."
+    
+    git clone https://github.com/GandertM/postinstall.git
+
+    if test $? -eq 0; then
+        log_message "INFO" "Project 'postinstall' installed successfully."
+    else
+        log_message "ERROR" "Project 'postinstall' not installed."
+        exit 1
+    fi
+
+    git clone https://github.com/GandertM/postinstall-opensuse.git
+    
+    if test $? -eq 0; then
+        log_message "INFO" "Project 'postinstall-opensuse' installed successfully."
+    else
+        log_message "ERROR" "Project 'postinstall-opensuse' not installed."
+        exit 1
+    fi
+    
     cd "$HOME"
 }
 
@@ -243,13 +351,13 @@ install_mc_theme() {
         mkdir -p "$DIR_MC_THEME"
     
         if [[ ! -d "$DIR_DOWNLOAD" ]]; then
-        mkdir -p "$DIR_DOWNLOAD"
+            mkdir -p "$DIR_DOWNLOAD"
         fi
 
         cd "$DIR_DOWNLOAD"
         git clone https://github.com/dracula/midnight-commander.git
         cd "./midnight-commander/skins/"
-        cp *.ini "$DIR_MC_THEME"
+        cp ./*.ini "$DIR_MC_THEME"
         cd "$HOME"
         log_message "INFO" "Midnight Commander theme installed successfully."
         

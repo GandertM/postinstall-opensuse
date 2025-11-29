@@ -5,14 +5,19 @@ set -euo pipefail  # Safe bash scripting: exit on error, unset var, or pipe fail
 TIMESTAMP=$(date '+%Y-%m-%d-%H-%M-%S')
 LOGFILE="$HOME/install-01-${TIMESTAMP}.log"
 
-# source functions
-source ./core/system-functions.sh
+if [ -f ./core/system-functions.sh ]; then
+    
+    # source functions
+    source ./core/system-functions.sh
 
-# Verify it is loaded 
-#if [[ $? -ne 0 ]]; then
-#  log_message "ERROR" "Error sourcing functions"
-#  exit 1
-#fi
+    if test $? -eq 0; then
+        log_message "INFO" "Function sourced successfully"
+    else
+        log_message "ERROR" "Error sourcing functions"
+        exit 1
+    fi
+
+fi
 
 log_message "FILE" "Start $(basename "$0")"
 
@@ -20,10 +25,46 @@ check_sudo
 
 check_user_b
 
-source ./core/system-refresh.sh
+if [ -f ./core/system-refresh.sh ]; then
+    
+    # source refresh
+    source ./core/system-refresh.sh
 
-source ./core/system-update.sh
+    if test $? -eq 0; then
+        log_message "INFO" "Refresh sourced successfully"
+    else
+        log_message "ERROR" "Error sourcing refresh"
+        exit 1
+    fi
 
-source ./core/system-reboot.sh
+fi
+
+if [ -f ./core/system-update.sh ]; then
+    
+    # source refresh
+    source ./core/system-update.sh
+
+    if test $? -eq 0; then
+        log_message "INFO" "Update sourced successfully"
+    else
+        log_message "ERROR" "Error sourcing update"
+        exit 1
+    fi
+
+fi
+
+if [ -f ./core/system-reboot.sh ]; then
+    
+    # source refresh
+    source ./core/system-reboot.sh
+
+    if test $? -eq 0; then
+        log_message "INFO" "Reboot sourced successfully"
+    else
+        log_message "ERROR" "Error sourcing reboot"
+        exit 1
+    fi
+
+fi
 
 log_message "FILE" "End $(basename "$0")"
