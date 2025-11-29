@@ -108,7 +108,14 @@ install_app() {
             log_message "INFO" "$APP is already installed, skipping installation."
         else
             log_message "INFO" "Installing $APP..."
-            sudo zypper --non-interactive install "$APP" && log_message "INSTALL" "$APP installed successfully." || log_message "ERROR" "Failed to install $APP."
+            sudo zypper --non-interactive install "$APP"
+
+            if test $? -eq 0; then
+                log_message "INSTALL" "$APP installed successfully."
+            else
+                log_message "ERROR" "Failed to install $APP."
+                exit 1
+            fi
         fi
     fi
 
@@ -116,10 +123,24 @@ install_app() {
     if [[ -n "$1" ]] && [[ -n "${2:-""}" ]]; then
         if repo_exists "$REPO"; then
             log_message "INFO" "Installing $APP from $REPO..."
-            sudo zypper --non-interactive install --allow-vendor-change --from "$REPO" "$APP" && log_message "INSTALL" "$APP installed successfully." || log_message "ERROR" "Failed to install $APP from $REPO."
+            sudo zypper --non-interactive install --allow-vendor-change --from "$REPO" "$APP"
+
+            if test $? -eq 0; then
+                log_message "INSTALL" "$APP installed successfully."
+            else
+                log_message "ERROR" "Failed to install $APP from $REPO."
+                exit 1
+            fi
         else
             log_message "INFO" "Installing $APP from default repo. Repository $REPO not present."
-            sudo zypper --non-interactive install "$APP" && log_message "INSTALL" "$APP installed successfully." || log_message "ERROR" "Failed to install $APP."
+            sudo zypper --non-interactive install "$APP"
+
+            if test $? -eq 0; then
+                log_message "INSTALL" "$APP installed successfully."
+            else
+                log_message "ERROR" "Failed to install $APP."
+                exit 1
+            fi
         fi
     fi
 }
@@ -134,7 +155,14 @@ install_app_interactive() {
             log_message "INFO" "$APP is already installed, skipping installation."
         else
             log_message "INFO" "Installing $APP..."
-            sudo zypper install "$APP" && log_message "INSTALL" "$APP installed successfully." || log_message "ERROR" "Failed to install $APP."
+            sudo zypper install "$APP"
+
+            if test $? -eq 0; then
+                log_message "INSTALL" "$APP installed successfully."
+            else
+                log_message "ERROR" "Failed to install $APP."
+                exit 1
+            fi
         fi
     fi
 
@@ -142,10 +170,24 @@ install_app_interactive() {
     if [[ -n "$1" ]] && [[ -n "${2:-""}" ]]; then
         if repo_exists "$REPO"; then
             log_message "INFO" "Installing $APP from $REPO..."
-            sudo zypper install --allow-vendor-change --from "$REPO" "$APP" && log_message "INSTALL" "$APP installed successfully." || log_message "ERROR" "Failed to install $APP from $REPO."
+            sudo zypper install --allow-vendor-change --from "$REPO" "$APP"
+
+            if test $? -eq 0; then
+                log_message "INSTALL" "$APP installed successfully."
+            else
+                log_message "ERROR" "Failed to install $APP from $REPO."
+                exit 1
+            fi
         else
             log_message "INFO" "Installing $APP from default repo. Repository $REPO not present."
-            sudo zypper install "$APP" && log_message "INSTALL" "$APP installed successfully." || log_message "ERROR" "Failed to install $APP."
+            sudo zypper install "$APP"
+
+            if test $? -eq 0; then
+                log_message "INSTALL" "$APP installed successfully."
+            else
+                log_message "ERROR" "Failed to install $APP."
+                exit 1
+            fi
         fi
     fi
 }
@@ -155,18 +197,56 @@ remove_app() {
 
     if app_exists "$APP"; then
         log_message "INFO" "Removing $APP..."
-        sudo zypper remove -y "$APP" && log_message "REMOVE" "$APP removed successfully." || log_message "ERROR" "Failed to remove $APP."
+        sudo zypper remove -y "$APP"
+
+        if test $? -eq 0; then
+            log_message "REMOVE" "$APP removed successfully."
+        else
+            og_message "ERROR" "Failed to remove $APP."
+            exit 1
+        fi
     else
         log_message "INFO" "$APP is not installed, skipping removal."
     fi
 }
 
 set_grub() {
+
     # change wait seconds of grub (from 8 to 2)
-    sudo sed -i "s/GRUB_TIMEOUT=8/GRUB_TIMEOUT=2/gI" /etc/default/grub
+    if [ -f /etc/default/grub ]; then
+    
+        sudo sed -i "s/GRUB_TIMEOUT=8/GRUB_TIMEOUT=2/gI" /etc/default/grub
+
+        if test $? -eq 0; then
+            log_message "INFO" "Update grub boottime successfull"
+        else
+            log_message "ERROR" "Failed to change grub boottime"
+            exit 1
+        fi
+
+    fi
 
     # process changes
     sudo grub2-mkconfig -o /boot/grub2/grub.cfg || log_message "ERROR" "Failed to change grub"
+
+    if app_exists grub2-mkconfig; then
+
+        # rebuild grub.cfg
+        log_message "INFO" "Rebuilding grub.cfg..."
+
+        sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+        
+        if test $? -eq 0; then
+            log_message "INFO" "Update grub boottime successfull"
+        else
+            log_message "ERROR" "Failed to change grub boottime"
+            exit 1
+        fi
+
+    else
+        log_message "ERROR" "Failed to change grub boottime, grub2-mkconfig not present."
+    fi
+
 }
 
 install_flatpak_system() {
@@ -176,7 +256,14 @@ install_flatpak_system() {
         log_message "INFO" "$APP is already installed, skipping installation."
     else
         log_message "INFO" "Installing $APP..."
-        flatpak install --system -y flathub "$APP" && log_message "INSTALL" "$APP installed successfully." || log_message "ERROR" "Failed to install $APP."
+        flatpak install --system -y flathub "$APP"
+
+        if test $? -eq 0; then
+            log_message "INSTALL" "$APP installed successfully."
+        else
+            log_message "ERROR" "Failed to install $APP."
+            exit 1
+        fi
     fi
 }
 
@@ -187,6 +274,13 @@ install_flatpak_user() {
         log_message "INFO" "$APP is already installed, skipping installation."
     else
         log_message "INFO" "Installing $APP..."
-        flatpak install --user -y flathub "$APP" && log_message "INSTALL" "$APP installed successfully." || log_message "ERROR" "Failed to install $APP."
+        flatpak install --user -y flathub "$APP"
+
+        if test $? -eq 0; then
+            log_message "INSTALL" "$APP installed successfully."
+        else
+            log_message "ERROR" "Failed to install $APP."
+            exit 1
+        fi
     fi
 }
