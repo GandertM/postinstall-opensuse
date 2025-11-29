@@ -100,7 +100,7 @@ repo_exists() {
 
 install_app() {
     APP="$1"  
-    REPO="$2"
+    REPO="${2:-""}"
 
     # when an app is provided, but no repo (use default repo)
     if [[ -n "$1" ]] && [[ -z "$2" ]]; then
