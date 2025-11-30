@@ -194,9 +194,13 @@ install_meslo() {
 
   # Install font 'MesloLGSDZ Nerd Font 13pt' of 'MesloLGS Nerd Font Mono'
   FONT_NAME="MesloLGS Nerd Font Mono"
+  
   if fc-list :family | grep -iq "$FONT_NAME"; then
+  
       log_message "INFO" "Font '$FONT_NAME' is installed."
+  
   else
+  
       log_message "INFO" "Installing font '$FONT_NAME'"
       
       # Change this URL to correspond with the correct font
@@ -228,9 +232,13 @@ install_firacode() {
 
   # Install font 'FiraCode Nerd Font'
   FONT_NAME="FiraCode Nerd Font"
+  
   if fc-list :family | grep -iq "$FONT_NAME"; then
+  
       log_message "INFO" "Font '$FONT_NAME' is installed."
+  
   else
+  
       log_message "INFO" "Installing font '$FONT_NAME'"
       
       # Change this URL to correspond with the correct font
@@ -260,7 +268,9 @@ install_firacode() {
 install_dotfiles() {
     log_message "-------" "Install projects."
     local DIR_DOTS="$HOME/.dotfiles"
+    
     cd "$HOME"
+    
     if [[ ! -d "$DIR_DOTS" ]]; then
         
         mkdir -p "$DIR_DOTS"
@@ -273,6 +283,10 @@ install_dotfiles() {
             log_message "ERROR" "Dotfiles not cloned."
             exit 1
         fi
+
+    else
+
+        log_message "INFO" "Config files already installed."
 
     fi
 
@@ -291,23 +305,31 @@ stow_dotfiles() {
         "vim"
     )
 
-    cd "$DIR_DOTS"
-
-    # actual stowing
-    for APP in "${STOW_LIST[@]}"; do
+    if [[ -d "$DIR_DOTS" ]]; then
         
-        log_message "INFO" "Creating $APP..."
+        cd "$DIR_DOTS"
+
+        # actual stowing
+        for APP in "${STOW_LIST[@]}"; do
         
-        stow "$APP"
+            log_message "INFO" "Stowing $APP..."
+        
+            stow "$APP"
 
-        if test $? -eq 0; then
-            log_message "INFO" "$APP stowed successfully."
-        else
-            log_message "ERROR" "$APP not stowed."
-            exit 1
-        fi
+            if test $? -eq 0; then
+                log_message "INFO" "$APP stowed successfully."
+            else
+                log_message "ERROR" "$APP not stowed."
+                exit 1
+            fi
 
-    done
+        done
+    
+    else
+
+        log_message "INFO" "Config files directory not present."
+
+    fi
 
     cd "$HOME"
 }
@@ -315,28 +337,45 @@ stow_dotfiles() {
 install_projects() {
     log_message "-------" "Install projects."
     local DIR_PROJECTS="$HOME/projects"
+    
     cd "$HOME"
+    
     if [[ ! -d "$DIR_PROJECTS" ]]; then
+    
         mkdir -p "$DIR_PROJECTS"
     
         cd "$DIR_PROJECTS"
     
-        git clone https://github.com/GandertM/postinstall.git
+        if [[ ! -d "$DIR_PROJECTS"/postinstall ]]; then
+            git clone https://github.com/GandertM/postinstall.git
 
-        if test $? -eq 0; then
-            log_message "INFO" "Project 'postinstall' installed successfully."
+            if test $? -eq 0; then
+                log_message "INFO" "Project 'postinstall' installed successfully."
+            else
+                log_message "ERROR" "Project 'postinstall' not installed."
+                exit 1
+            fi
+
         else
-            log_message "ERROR" "Project 'postinstall' not installed."
-            exit 1
+
+            log_message "INFO" "Project 'postinstall' already installed."
+
         fi
 
-        git clone https://github.com/GandertM/postinstall-opensuse.git
+        if [[ ! -d "$DIR_PROJECTS"/postinstall-opensuse ]]; then
+            git clone https://github.com/GandertM/postinstall-opensuse.git
     
-        if test $? -eq 0; then
-            log_message "INFO" "Project 'postinstall-opensuse' installed successfully."
+            if test $? -eq 0; then
+                log_message "INFO" "Project 'postinstall-opensuse' installed successfully."
+            else
+                log_message "ERROR" "Project 'postinstall-opensuse' not installed."
+                exit 1
+            fi
+
         else
-            log_message "ERROR" "Project 'postinstall-opensuse' not installed."
-            exit 1
+
+            log_message "INFO" "Project 'postinstall-opensuse' already installed."
+
         fi
     fi
 
@@ -351,6 +390,7 @@ install_mc_theme() {
     cd "$HOME"
 
     if [[ ! -d "$DIR_MC_THEME" ]]; then
+        
         mkdir -p "$DIR_MC_THEME"
     
         if [[ ! -d "$DIR_DOWNLOAD" ]]; then
@@ -358,15 +398,23 @@ install_mc_theme() {
         fi
 
         cd "$DIR_DOWNLOAD"
+        
         git clone https://github.com/dracula/midnight-commander.git
+        
         cd "./midnight-commander/skins/"
+        
         cp ./*.ini "$DIR_MC_THEME"
+        
         cd "$HOME"
+        
         log_message "INFO" "Midnight Commander theme installed successfully."
         
     else
+        
         log_message "INFO" "Midnight Commander theme is already installed, skipping installation."
+        
         return
+        
     fi
 
     cd "$HOME" 

@@ -44,7 +44,7 @@ fi
 
 check_sudo
     
-check_user_k
+check_user_c
 
 
 # ----------------------------------------
@@ -133,9 +133,13 @@ install_meslo() {
 
   # Install font 'MesloLGSDZ Nerd Font 13pt' of 'MesloLGS Nerd Font Mono'
   FONT_NAME="MesloLGS Nerd Font Mono"
+  
   if fc-list :family | grep -iq "$FONT_NAME"; then
+  
       log_message "INFO" "Font '$FONT_NAME' is installed."
+  
   else
+  
       log_message "INFO" "Installing font '$FONT_NAME'"
       
       # Change this URL to correspond with the correct font
@@ -167,9 +171,13 @@ install_firacode() {
 
   # Install font 'FiraCode Nerd Font'
   FONT_NAME="FiraCode Nerd Font"
+  
   if fc-list :family | grep -iq "$FONT_NAME"; then
+  
       log_message "INFO" "Font '$FONT_NAME' is installed."
+  
   else
+  
       log_message "INFO" "Installing font '$FONT_NAME'"
       
       # Change this URL to correspond with the correct font

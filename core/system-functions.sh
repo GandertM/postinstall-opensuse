@@ -212,7 +212,31 @@ remove_app() {
 
 set_grub() {
 
-    # change wait seconds of grub (from 8 to 2)
+if echo "$ID" | grep -qiE 'tumbleweed|slowroll'; then
+
+    # change wait seconds of grub2-bls (from 8 to 2) in SLOWROLL or TUMBLEWEED
+    if app_exists sdbootutil; then
+
+        log_message "INFO" "Setting new timeout to 2 seconds"
+
+        sudo sdbootutil set-timeout 2
+
+        if test $? -eq 0; then
+            log_message "INFO" "Update grub boottime successfull"
+        else
+            log_message "ERROR" "Failed to change grub boottime, grub2-mkconfig run into error."
+            exit 1
+        fi
+
+    else
+
+        log_message "ERROR" "Failed to change boottime, sdbootutil not present"
+
+    fi
+
+else
+
+    # change wait seconds of grub2 (from 8 to 2) in LEAP
     if [ -f /etc/default/grub ]; then
     
         sudo sed -i "s/GRUB_TIMEOUT=8/GRUB_TIMEOUT=2/gI" /etc/default/grub
@@ -224,29 +248,33 @@ set_grub() {
             exit 1
         fi
 
-    fi
+        if app_exists grub2-mkconfig; then
 
-    # process changes
-    sudo grub2-mkconfig -o /boot/grub2/grub.cfg || log_message "ERROR" "Failed to change grub"
+            # rebuild grub.cfg
+            log_message "INFO" "Rebuilding grub.cfg..."
 
-    if app_exists grub2-mkconfig; then
-
-        # rebuild grub.cfg
-        log_message "INFO" "Rebuilding grub.cfg..."
-
-        sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+            sudo grub2-mkconfig -o /boot/grub2/grub.cfg
         
-        if test $? -eq 0; then
-            log_message "INFO" "Update grub boottime successfull"
+            if test $? -eq 0; then
+                log_message "INFO" "Update grub boottime successfull"
+            else
+                log_message "ERROR" "Failed to change grub boottime, grub2-mkconfig run into error."
+                exit 1
+            fi
+            
         else
-            log_message "ERROR" "Failed to change grub boottime"
-            exit 1
+
+            log_message "ERROR" "Failed to change grub boottime, grub2-mkconfig not present"
+
         fi
 
     else
+            
         log_message "ERROR" "Failed to change grub boottime, grub2-mkconfig not present."
+
     fi
 
+fi
 }
 
 install_flatpak_system() {
