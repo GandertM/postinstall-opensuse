@@ -248,24 +248,16 @@ else
             exit 1
         fi
 
-        if app_exists grub2-mkconfig; then
+        # rebuild grub.cfg
+        log_message "INFO" "Rebuilding grub.cfg..."
 
-            # rebuild grub.cfg
-            log_message "INFO" "Rebuilding grub.cfg..."
-
-            sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+        sudo grub2-mkconfig -o /boot/grub2/grub.cfg
         
-            if test $? -eq 0; then
-                log_message "INFO" "Update grub boottime successfull"
-            else
-                log_message "ERROR" "Failed to change grub boottime, grub2-mkconfig run into error."
-                exit 1
-            fi
-            
+        if test $? -eq 0; then
+            log_message "INFO" "Update grub boottime successfull"
         else
-
-            log_message "ERROR" "Failed to change grub boottime, grub2-mkconfig not present"
-
+            log_message "ERROR" "Failed to change grub boottime, grub2-mkconfig run into error."
+            exit 1
         fi
 
     else
