@@ -122,25 +122,35 @@ install_app() {
     # when an app and a repo is provided (use specific repo with vendor change for the app, if repo not present use default repo)
     if [[ -n "$1" ]] && [[ -n "${2:-""}" ]]; then
         if repo_exists "$REPO"; then
-            log_message "INFO" "Installing $APP from $REPO..."
-            sudo zypper --non-interactive install --allow-vendor-change --from "$REPO" "$APP"
-
-            if test $? -eq 0; then
-                log_message "INSTALL" "$APP installed successfully."
+            
+            if app_exists "$APP"; then
+                log_message "INFO" "$APP is already installed, skipping installation."
             else
-                log_message "ERROR" "Failed to install $APP from $REPO."
-                exit 1
+                log_message "INFO" "Installing $APP from $REPO..."
+                sudo zypper --non-interactive install --allow-vendor-change --from "$REPO" "$APP"
+
+                if test $? -eq 0; then
+                    log_message "INSTALL" "$APP installed successfully."
+                else
+                    log_message "ERROR" "Failed to install $APP from $REPO."
+                    exit 1
+                fi
             fi
         else
-            log_message "INFO" "Installing $APP from default repo. Repository $REPO not present."
-            sudo zypper --non-interactive install "$APP"
 
-            if test $? -eq 0; then
-                log_message "INSTALL" "$APP installed successfully."
+            if app_exists "$APP"; then
+                log_message "INFO" "$APP is already installed, skipping installation."
             else
-                log_message "ERROR" "Failed to install $APP."
-                exit 1
-            fi
+                log_message "INFO" "Installing $APP from default repo. Repository of choice not present."
+                sudo zypper --non-interactive install "$APP"
+
+                if test $? -eq 0; then
+                    log_message "INSTALL" "$APP installed successfully."
+                else
+                    log_message "ERROR" "Failed to install $APP."
+                    exit 1
+                fi
+            fi    
         fi
     fi
 }
