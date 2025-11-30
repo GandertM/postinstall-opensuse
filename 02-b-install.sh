@@ -146,14 +146,20 @@ source ./apps/app-install-net-tools-deprecated.sh
 install_app "MozillaFirefox"
 install_app "MozillaThunderbird"
 
+# Multimedia
+install_app "abcde"
+install_app "flac"
+
 # editor
 install_app "micro-editor"
+install_app "kate"
 
 # required for desktop
 install_app "yakuake"
 install_app "plasma-vault"
 
 # tools
+install_app "dolphin"
 install_app "btop"
 install_app "ShellCheck"
 #source ./apps/app-install-yt-dlp.sh  # not in default repo's anymore
@@ -168,6 +174,7 @@ install_app "mc"
 install_app "partitionmanager"
 
 # required for krusader
+install_app "krusader"
 install_app "kget"
 install_app "kompare"
 install_app "krename"
