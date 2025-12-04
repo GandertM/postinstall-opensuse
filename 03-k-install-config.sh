@@ -156,10 +156,11 @@ create_directories() {
         ".ssh"
         ".dotfiles"
         "bin"
-        "projects"
-        "mounts"
+        "encrypted"
         "journals"
+        "mounts"
         "notes"
+        "projects"
         "restores"
         "virtmachs"
     )

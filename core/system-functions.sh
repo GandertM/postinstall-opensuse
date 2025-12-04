@@ -99,15 +99,34 @@ repo_exists() {
 }
 
 install_app() {
-    APP="$1"  
-    REPO="${2:-""}"
+    #APP="$1"  
+    #REPO="${2:-""}"
+
+    if [[ -z $1 ]]; then 
+        echo "No parameter passed."
+        return
+    else
+        echo "Parameter passed = $1"
+        local APP="$1"
+    fi
+
+    if [[ -z $2 ]];
+    then 
+        echo "No parameter passed."
+        local REPO="default"
+    else
+        echo "Parameter passed = $2"
+        local REPO="$2"
+    fi
 
     # when an app is provided, but no repo (use default repo)
-    if [[ -n "$1" ]] && [[ -z "${2:-""}" ]]; then
+    #if [[ -n "$1" ]] && [[ -z "${2:-""}" ]]; then
+    if [[ "$REPO" == "default" ]]; then
+        
         if app_exists "$APP"; then
             log_message "INFO" "$APP is already installed, skipping installation."
         else
-            log_message "INFO" "Installing $APP..."
+            log_message "INFO" "Installing $APP from the default repository."
             sudo zypper --non-interactive install "$APP"
 
             if test $? -eq 0; then
@@ -117,16 +136,19 @@ install_app() {
                 exit 1
             fi
         fi
-    fi
+
+    #fi
+    else
 
     # when an app and a repo is provided (use specific repo with vendor change for the app, if repo not present use default repo)
-    if [[ -n "$1" ]] && [[ -n "${2:-""}" ]]; then
+    #if [[ -n "$1" ]] && [[ -n "${2:-""}" ]]; then
+
         if repo_exists "$REPO"; then
             
             if app_exists "$APP"; then
                 log_message "INFO" "$APP is already installed, skipping installation."
             else
-                log_message "INFO" "Installing $APP from $REPO..."
+                log_message "INFO" "Installing $APP from repository $REPO."
                 sudo zypper --non-interactive install --allow-vendor-change --from "$REPO" "$APP"
 
                 if test $? -eq 0; then
@@ -138,10 +160,12 @@ install_app() {
             fi
         else
 
+            log_message "INFO" "Provided repository $REPO is not present. Diverting to default repository for $APP."
+
             if app_exists "$APP"; then
                 log_message "INFO" "$APP is already installed, skipping installation."
             else
-                log_message "INFO" "Installing $APP from default repo. Repository of choice not present."
+                log_message "INFO" "Installing $APP from default repo."
                 sudo zypper --non-interactive install "$APP"
 
                 if test $? -eq 0; then
