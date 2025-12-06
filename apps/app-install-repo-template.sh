@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
-set -euo pipefail  # Safe bash scripting: exit on error, unset var, or pipe fail
-
+set -euo pipefail # Safe bash scripting: exit on error, unset var, or pipe fail
 
 # -----------------------------------
-# installing an application 
-# from repo 
+# installing an application
+# from repo
 # usage: 1. repo 2. app
 # -----------------------------------
 
 install_app_repo "dummy1" "dummy2"
-
 
 # -----------------------------------
 # required configuration
