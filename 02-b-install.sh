@@ -94,6 +94,21 @@ if [ -f ./repos/repo-add-flathub-user.sh ]; then
 
 fi
 
+# add repository - gitlab.com_paulcarroty_vscodium_repo
+if [ -f ./repos/repo-add-gitlab.com_paulcarroty_vscodium_repo.sh ]; then
+
+	# source refresh
+	source ./repos/repo-add-gitlab.com_paulcarroty_vscodium_repo.sh
+
+	if test $? -eq 0; then
+		log_message "INFO" "repo-add-gitlab.com_paulcarroty_vscodium_repo.sh sourced successfully"
+	else
+		log_message "ERROR" "Failed to source file repo-add-gitlab.com_paulcarroty_vscodium_repo.sh"
+		exit 1
+	fi
+
+fi
+
 # ----------------------------------------
 # refresh repositories
 # ----------------------------------------
@@ -158,7 +173,6 @@ install_app "plasma-vault"
 # tools
 install_app "dolphin"
 install_app "btop"
-install_app "ShellCheck"
 #source ./apps/app-install-yt-dlp.sh  # not in default repo's anymore
 #install_app "yt-dlp" # not in default repo's anymore
 install_app "syncthing"
@@ -197,6 +211,11 @@ install_app "gstreamer-plugins-ugly" "packman-essentials"
 install_app "gstreamer-plugins-libav" "packman-essentials"
 install_app "libavcodec" "packman-essentials"
 install_app "vlc-codecs" "packman-essentials"
+
+# from gitlab.com_paulcarroty_vscodium_repo
+install_app "codium" "gitlab.com_paulcarroty_vscodium_repo"
+install_app "shfmt"
+install_app "ShellCheck"
 
 # ----------------------------------------
 # install flatpaks

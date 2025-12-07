@@ -99,27 +99,24 @@ repo_exists() {
 }
 
 install_app() {
-	#APP="$1"
-	#REPO="${2:-""}"
 
 	if [[ -z $1 ]]; then
-		echo "No parameter passed."
+		echo "No parameter 1 passed."
 		return
 	else
-		echo "Parameter passed = $1"
+		echo "Parameter 1 passed = $1"
 		local APP="$1"
 	fi
 
 	if [[ -z $2 ]]; then
-		echo "No parameter passed."
+		echo "No parameter 2 passed."
 		local REPO="default"
 	else
-		echo "Parameter passed = $2"
+		echo "Parameter 2 passed = $2"
 		local REPO="$2"
 	fi
 
 	# when an app is provided, but no repo (use default repo)
-	#if [[ -n "$1" ]] && [[ -z "${2:-""}" ]]; then
 	if [[ "$REPO" == "default" ]]; then
 
 		if app_exists "$APP"; then
@@ -136,12 +133,9 @@ install_app() {
 			fi
 		fi
 
-	#fi
 	else
 
 		# when an app and a repo is provided (use specific repo with vendor change for the app, if repo not present use default repo)
-		#if [[ -n "$1" ]] && [[ -n "${2:-""}" ]]; then
-
 		if repo_exists "$REPO"; then
 
 			if app_exists "$APP"; then
