@@ -100,7 +100,7 @@ repo_exists() {
 
 install_app() {
 	local APP="$1"
-	local REPO="$2"
+	local REPO="${2:-""}"
 
 	if [[ -z "$APP" ]]; then
 		echo "No parameter 1 passed."
