@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -eo pipefail # Safe bash scripting: exit on error, unset var, or pipe fail
+set -euo pipefail # Safe bash scripting: exit on error, unset var, or pipe fail
 
 # Function to log messages
 log_message() {
@@ -7,6 +7,54 @@ log_message() {
 	MESSAGE=$2
 	NOW=$(date '+%Y-%m-%d %H:%M:%S')
 	printf "%s | %-8s | %s\n" "$NOW" "$LEVEL" "$MESSAGE" >>"$LOGFILE"
+}
+
+# blue line
+line_blue() {
+	# Drawing horizontal blue line in full width
+	cols=$(tput cols)
+	printf -v line "%*s" "$cols" ""
+	printf "\e[34m%s\e[0m\n" "${line// /─}"
+}
+
+line_red() {
+	# Drawing horizontal blue line in full width
+	cols=$(tput cols)
+	printf -v line "%*s" "$cols" ""
+	printf "\e[31m%s\e[0m\n" "${line// /─}"
+}
+
+# text in color
+text_color() {
+
+	# Print a text ($2) with a color ($1)
+	local input_color=$1
+
+	# Colors
+	case "$input_color" in
+	"Default") colorString='\033[0;39m' ;;
+	"Black") colorString='\033[0;30m' ;;
+	"DarkRed") colorString='\033[0;31m' ;;
+	"DarkGreen") colorString='\033[0;32m' ;;
+	"DarkYellow") colorString='\033[0;33m' ;;
+	"DarkBlue") colorString='\033[0;34m' ;;
+	"DarkMagenta") colorString='\033[0;35m' ;;
+	"DarkCyan") colorString='\033[0;36m' ;;
+	"Gray") colorString='\033[0;37m' ;;
+	"DarkGray") colorString='\033[1;90m' ;;
+	"Red") colorString='\033[1;91m' ;;
+	"Green") colorString='\033[1;92m' ;;
+	"Yellow") colorString='\033[1;93m' ;;
+	"Blue") colorString='\033[1;94m' ;;
+	"Magenta") colorString='\033[1;95m' ;;
+	"Cyan") colorString='\033[1;96m' ;;
+	"White") colorString='\033[1;97m' ;;
+	*) colorString='\033[0;39m' ;;
+	esac
+
+	# Print the text
+	printf "%b" "${colorString}" "$2" "${RC}\n\n"
+
 }
 
 # Check sudo
@@ -99,14 +147,18 @@ repo_exists() {
 }
 
 install_app() {
-	local APP="$1"
-	local REPO="${2:-""}"
+	local APP="${1:?Error: Required parameter missing}"
+	local REPO="${2-}" # expand to empty if unset (safe under -u)
 
 	if [[ -z "$APP" ]]; then
-		echo "No parameter 1 passed."
+		line_red
+		text_color "Red" "No parameter 1 passed."
+		line_red
 		return 1
 	else
-		echo "Parameter 1 passed = $APP"
+		line_blue
+		text_color "Cyan" "Installing $APP"
+		line_blue
 	fi
 
 	if [[ -n "$REPO" ]]; then
