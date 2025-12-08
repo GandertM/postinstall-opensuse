@@ -333,14 +333,14 @@ main() {
 
 # Create a pre-installation snapshot with snapper
 log_message "SNAPSHOT" "Creating pre-installation snapshot..."
-sudo snapper create -d "Pre-installation snapshot" || log_message "ERROR" "Failed to create pre-installation snapshot"
+sudo snapper create -d "PRE-installation SNAPSHOT" || log_message "ERROR" "Failed to create pre-installation snapshot"
 
 # Run main
 main
 
 # Create a post-installation snapshot with snapper
 log_message "SNAPSHOT" "Creating post-installation snapshot..."
-sudo snapper create -d "Post-installation snapshot" || log_message "ERROR" "Failed to create post-installation snapshot"
+sudo snapper create -d "POST-installation SNAPSHOT" || log_message "ERROR" "Failed to create post-installation snapshot"
 
 # Recommend reboot
 log_message "-------" "System installation and removals are complete. It's recommended to reboot the system."

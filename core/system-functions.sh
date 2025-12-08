@@ -331,3 +331,43 @@ install_flatpak_user() {
 		fi
 	fi
 }
+
+create_snapshot() {
+
+	# varable
+	local TYPE="$1"
+
+	# process
+	if [[ "$TYPE" == "pre" ]]; then
+
+		log_message "SNAPSHOT" "Creating pre-installation snapshot..."
+
+		sudo snapper create -d "PRE-installation SNAPSHOT"
+
+		if test $? -eq 0; then
+			log_message "INFO" "Pre-installation snapshot created."
+		else
+			log_message "ERROR" "Failed to create pre-installation snapshot."
+			exit 1
+		fi
+
+	elif [[ "$TYPE" == "post" ]]; then
+
+		log_message "SNAPSHOT" "Creating post-installation snapshot..."
+
+		sudo snapper create -d "POST-installation SNAPSHOT"
+
+		if test $? -eq 0; then
+			log_message "INFO" "POST-installation snapshot created."
+		else
+			log_message "ERROR" "Failed to create POST-installation snapshot."
+			exit 1
+		fi
+
+	else
+
+		log_message "ERROR" "Failed to create ANY-installation snapshot."
+		exit 1
+
+	fi
+}

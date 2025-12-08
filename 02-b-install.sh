@@ -6,7 +6,7 @@ TIMESTAMP=$(date '+%Y-%m-%d-%H-%M-%S')
 LOGFILE="$HOME/install-02-${TIMESTAMP}.log"
 
 # ----------------------------------------
-# source distro and functions
+# source functions and distro
 # ----------------------------------------
 
 if [ -f ./core/system-functions.sh ]; then
@@ -38,12 +38,17 @@ if [ -f /etc/os-release ]; then
 fi
 
 # ----------------------------------------
-# basis checks
+# basic checks
 # ----------------------------------------
 
 check_sudo
 
 check_user_b
+
+# ----------------------------------------
+# create a system snapshot
+# ----------------------------------------
+create_snapshot "pre"
 
 # ----------------------------------------
 # add repositories
@@ -231,6 +236,11 @@ install_flatpak_user "org.cockpit_project.CockpitClient"
 
 # speed up grub
 set_grub
+
+# ----------------------------------------
+# create a system snapshot
+# ----------------------------------------
+create_snapshot "post"
 
 # ----------------------------------------
 # reboot
