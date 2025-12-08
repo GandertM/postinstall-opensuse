@@ -28,7 +28,7 @@ line_red() {
 text_color() {
 
 	# Print a text ($2) with a color ($1)
-	local input_color=$1
+	local input_color="$1"
 
 	# Colors
 	case "$input_color" in
