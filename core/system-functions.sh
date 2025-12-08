@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail # Safe bash scripting: exit on error, unset var, or pipe fail
+set -eo pipefail # Safe bash scripting: exit on error, unset var, or pipe fail
 
 # Function to log messages
 log_message() {
