@@ -150,23 +150,22 @@ install_app() {
 	local APP="${1:?Error: Required parameter missing}"
 	local REPO="${2-}" # expand to empty if unset (safe under -u)
 
+	line_blue
+
 	if [[ -z "$APP" ]]; then
-		line_red
 		text_color "Red" "No parameter 1 passed."
-		line_red
 		return 1
 	else
-		line_blue
 		text_color "Cyan" "Installing $APP"
-		line_blue
 	fi
 
-	if [[ -n "$REPO" ]]; then
-		echo "Parameter 2 passed = $REPO"
-	else
-		echo "No parameter 2 passed."
+	if ! [[ -n "$REPO" ]]; then
 		REPO="default"
 	fi
+
+	text_color "Cyan" "from repository $REPO"
+
+	line_blue
 
 	# when an app is provided, but no repo (use default repo)
 	if [[ "$REPO" == "default" ]]; then
