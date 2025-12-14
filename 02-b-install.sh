@@ -156,7 +156,8 @@ install_app "stow"
 install_app "wine"
 
 # required for network
-install_app "autofs"
+#install_app "autofs"
+source ./apps/app-install-autofs.sh
 source ./apps/app-install-net-tools-deprecated.sh
 
 # Mozilla
