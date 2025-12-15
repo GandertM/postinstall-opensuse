@@ -83,6 +83,16 @@ if [ -f ./core/system-update.sh ]; then
 
 fi
 
+# ----------------------------------------
+# create a system snapshot
+# ----------------------------------------
+create_snapshot "post"
+
+log_message "FILE" "End $(basename "$0")"
+
+# ----------------------------------------
+# reboot
+# ----------------------------------------
 if [ -f ./core/system-reboot.sh ]; then
 
 	# source refresh
@@ -96,10 +106,3 @@ if [ -f ./core/system-reboot.sh ]; then
 	fi
 
 fi
-
-# ----------------------------------------
-# create a system snapshot
-# ----------------------------------------
-create_snapshot "post"
-
-log_message "FILE" "End $(basename "$0")"

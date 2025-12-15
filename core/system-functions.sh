@@ -53,7 +53,7 @@ text_color() {
 	esac
 
 	# Print the text
-	printf "%b" "${colorString}" "$2" "\033[0m\n\n"
+	printf "%b" "${colorString}" "$2" "\033[0m\n"
 
 }
 
