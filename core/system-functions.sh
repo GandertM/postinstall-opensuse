@@ -461,13 +461,11 @@ add_user() {
 	# Extract the first letter
 	FIRST_LETTER="${username:0:1}"
 
-	# Set correct UID
+	# Set correct UID for NFS
 	if [[ "$FIRST_LETTER" == "k" ]]; then
 		ID="1027"
 	elif [[ "$FIRST_LETTER" == "c" ]]; then
 		ID="1028"
-	elif [[ "$FIRST_LETTER" == "g" ]]; then
-		ID="1050"
 	else
 		ID=""
 	fi
