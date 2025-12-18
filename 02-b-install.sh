@@ -155,6 +155,7 @@ install_app "unzip"
 install_app "fontconfig"
 install_app "mlocate"
 install_app "btop"
+install_app "starship"
 install_app "stow"
 install_app "wine"
 

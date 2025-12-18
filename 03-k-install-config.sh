@@ -149,7 +149,6 @@ create_directories() {
 		".config/zsh"
 		".crd"
 		".ssh"
-		".dotfiles"
 		"bin"
 		"encrypted"
 		"journals"
