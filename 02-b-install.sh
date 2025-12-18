@@ -238,6 +238,9 @@ install_flatpak_user "org.cockpit_project.CockpitClient"
 # speed up grub
 set_grub
 
+# create users
+source ~/add-users.sh
+
 # ----------------------------------------
 # create a system snapshot
 # ----------------------------------------
