@@ -342,6 +342,11 @@ install_projects() {
 		cd "$DIR_PROJECTS"
 
 		if [[ ! -d "$DIR_PROJECTS"/postinstall ]]; then
+
+			mkdir -p "$DIR_PROJECTS"/postinstall
+
+			cd "$DIR_PROJECTS"/postinstall
+
 			git clone https://github.com/GandertM/postinstall.git
 
 			if test $? -eq 0; then
@@ -358,6 +363,11 @@ install_projects() {
 		fi
 
 		if [[ ! -d "$DIR_PROJECTS"/postinstall-opensuse ]]; then
+
+			mkdir -p "$DIR_PROJECTS"/postinstall-opensuse
+
+			cd "$DIR_PROJECTS"/postinstall-opensuse
+
 			git clone https://github.com/GandertM/postinstall-opensuse.git
 
 			if test $? -eq 0; then
@@ -372,6 +382,11 @@ install_projects() {
 			log_message "INFO" "Project 'postinstall-opensuse' already installed."
 
 		fi
+
+	else
+
+		log_message "INFO" "Projects already installed."
+
 	fi
 
 	cd "$HOME"
