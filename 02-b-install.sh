@@ -154,7 +154,7 @@ install_app "fastfetch"
 install_app "unzip"
 install_app "fontconfig"
 install_app "mlocate"
-install_app "htop"
+install_app "btop"
 install_app "stow"
 install_app "wine"
 
@@ -192,6 +192,7 @@ install_app "gdu"
 install_app "xkill"
 install_app "mc"
 install_app "partitionmanager"
+install_app "lynis"
 
 # required for krusader
 install_app "krusader"
