@@ -142,6 +142,9 @@ install_app "curl"
 install_app "git"
 install_app "flatpak"
 
+# required for swap
+install_app "systemd-zram-service"
+
 # required for shell
 install_app "zsh"
 install_app "tar"
@@ -238,8 +241,13 @@ install_flatpak_user "org.cockpit_project.CockpitClient"
 # speed up grub
 set_grub
 
+# activate swap
+sudo zramswapon
+
+# ----------------------------------------
 # create users
-source ~/add-users.sh
+# ----------------------------------------
+add_user
 
 # ----------------------------------------
 # create a system snapshot
