@@ -171,6 +171,8 @@ install_app "MozillaThunderbird"
 # Multimedia
 install_app "abcde"
 install_app "flac"
+install_app "dragonplayer"
+install_app "dragonplayer-lang"
 
 # editor
 install_app "micro-editor"
