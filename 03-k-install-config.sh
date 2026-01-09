@@ -152,7 +152,7 @@ create_directories() {
 		"bin"
 		"encrypted"
 		"journals"
-		"mounts"
+		"data-on-nas"
 		"notes"
 		"projects"
 		"restores"
@@ -430,6 +430,36 @@ install_mc_theme() {
 	cd "$HOME"
 }
 
+link_mounts() {
+	log_message "-------" "Link mounts."
+	local DIR_LINKS="$HOME/data-on-nas"
+
+	cd "$HOME"
+
+	if [[ ! -d "$DIR_LINKS" ]]; then
+
+		mkdir -p "$DIR_LINKS"
+
+		ln -s /mnt/nas/backup ~/data-on-nas/backup ||  log_message "ERROR" "Link backup not succesfull."
+		ln -s /mnt/nas/film ~/data-on-nas/film ||  log_message "ERROR" "Link film not succesfull."
+		ln -s /mnt/nas/foto ~/data-on-nas/foto ||  log_message "ERROR" "Link foto not succesfull."
+		ln -s /mnt/nas/gedeeld ~/data-on-nas/gedeeld ||  log_message "ERROR" "Link gedeeld not succesfull."
+		ln -s /mnt/nas/homenas ~/data-on-nas/homenas ||  log_message "ERROR" "Link homenas not succesfull."
+		ln -s /mnt/nas/kluis ~/data-on-nas/kluis ||  log_message "ERROR" "Link kluis not succesfull."
+		ln -s /mnt/nas/muziek ~/data-on-nas/muziek ||  log_message "ERROR" "Link muziek not succesfull."
+		ln -s /mnt/nas/muziekarchief ~/data-on-nas/muziekarchief ||  log_message "ERROR" "Link muziekarchief not succesfull."
+		ln -s /mnt/nas/dl-diskst ~/data-on-nas/dl-diskst ||  log_message "ERROR" "Link dl-diskst not succesfull."
+		ln -s /mnt/nas/dl-bckupst ~/data-on-nas/dl-bckupst ||  log_message "ERROR" "Link dl-bckupst not succesfull."
+		ln -s /mnt/nas/homewrk ~/data-on-nas/homewrk ||  log_message "ERROR" "Link homewrk not succesfull."
+
+	else
+
+		log_message "INFO" "Links for mounts already set."
+
+	fi
+
+}
+
 # run configs
 create_directories
 install_meslo
@@ -438,3 +468,4 @@ install_dotfiles
 stow_dotfiles
 install_projects
 install_mc_theme
+link_mounts
