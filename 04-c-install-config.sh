@@ -118,6 +118,7 @@ install_flatpak_user "org.kde.knights"
 
 # office
 install_flatpak_user "org.onlyoffice.desktopeditors"
+install_flatpak_user "org.libreoffice.LibreOffice"
 
 # -------------------------------------
 # config
