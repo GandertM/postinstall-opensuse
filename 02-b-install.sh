@@ -165,7 +165,7 @@ source ./apps/app-install-autofs.sh
 #source ./apps/app-install-net-tools-deprecated.sh
 
 # Mozilla
-install_app "MozillaFirefox"
+#install_app "MozillaFirefox" # relative old / warning from bank / over to flatpak
 install_app "MozillaThunderbird"
 
 # Multimedia
