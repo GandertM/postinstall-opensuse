@@ -105,6 +105,9 @@ install_flatpak_user "org.keepassxc.KeePassXC"
 # backup
 install_flatpak_user "com.borgbase.Vorta"
 
+# encyption
+install_flatpak_user "org.cryptomator.Cryptomator"
+
 # audio & video
 install_flatpak_user "com.spotify.Client"
 install_flatpak_user "org.freac.freac"
