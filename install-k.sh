@@ -232,4 +232,13 @@ system_update
 
 create_post_snapshot
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ Logging ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# close log-file
+log_message "FILE" "End $(basename "$0")"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ Reboot  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+system_reboot
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ End ~~~~~~~~~~~~~~~~~~~~~~~~~~
