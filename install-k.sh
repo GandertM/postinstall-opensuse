@@ -2,9 +2,11 @@
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ HEADER ~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
+# install-b.sh
+#
 # 2026-04-14 created install script to get openSUSE up and running
 #
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~ ------ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Bash settings ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -12,30 +14,12 @@
 # Safe bash scripting 
 set -euo pipefail       # exit on error, unset var, or pipe fail
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~ Functions ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ Sourcing ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# determine openSUSE release
-[[ -f "/etc/os-release" ]] && source "/etc/os-release"
-
-# logging
-[[ -f "./core/system-function-logging.sh" ]] && source "./core/system-function-logging.sh"
-
-# user management
-#[[ -f "./core/system-function-users.sh" ]] && source "./core/system-function-users.sh"
-
-# packages
-[[ -f "./core/system-function-packages.sh" ]] && source "./core/system-function-packages.sh"
-
-# config
-[[ -f "./user/user-k-configs.sh" ]] && source "./user-k-configs.sh"
+# functions
+[[ -f "./core/functions.sh" ]] && source "./core/functions.sh"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Logging ~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# Create a timestamp for the log-file name
-TIMESTAMP=$(date '+%Y-%m-%d-%H-%M-%S')
-
-# create the name of the log-file
-LOGFILE="$HOME/install-b-${TIMESTAMP}.log"
 
 # create log-file
 log_message "FILE" "Start $(basename "$0")"
@@ -48,46 +32,181 @@ check_user_k
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Create snapshot PRE ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-PRE_ID=$(sudo snapper create --type pre --print-number --description "Start initial installation for k")
-
-if test $? -eq 0; then
-	log_message "INFO" "PRE-snapshot $PRE_ID created successfully"
-else
-	log_message "ERROR" "Error creating PRE-snapshot"
-	exit 1
-fi
+create_pre_snapshot
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Add repositories ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# [[ -f "./repos/repo-add-packman.sh" ]] && source "./repos/repo-add-packman.sh"  # done via opi
+add_repo_packman
 
-[[ -f "./repos/repo-add-utilities.sh" ]] && source "./repos/repo-add-utilities.sh"
+add_repo_utilities
 
-[[ -f "./repos/repo-add-gitlab.com_paulcarroty_vscodium_repo.sh" ]] && source "./repos/repo-add-gitlab.com_paulcarroty_vscodium_repo.sh"
+add_repo_vscodium
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Add flatpak repositories ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[[ -f "./repos/repo-add-flathub-user.sh" ]] && source "./repos/repo-add-flathub-user.sh"
+add_repo_flathub_user
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Refresh repositories ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[[ -f "./core/system-refresh.sh" ]] && source "./core/system-refresh.sh"
+system_refresh
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Install apps ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[[ -f "./core/system-packages.sh" ]] && source "./core/system-packages.sh"
+# [[ -f "./core/system-packages.sh" ]] && source "./core/system-packages.sh"
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~ Install flatpaks ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# required for shell
+install_app "zsh"
+install_app "tar"
+install_app "tree"
+install_app "unzip"
+install_app "fontconfig"
+install_app "mlocate"
+install_app "btop"
+install_app "starship"
+install_app "stow"
+install_app "wine"
 
-[[ -f "./user/user-k-flatpaks.sh" ]] && source "./user-k-flatpaks.sh"
+# Mozilla
+#install_app "MozillaFirefox" # relative old / warning from bank / over to flatpak
+install_app "MozillaThunderbird"
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~ Config system ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Multimedia
+install_app "abcde"
+install_app "flac"
+install_app "dragonplayer"
+install_app "dragonplayer-lang"
 
-# speed up grub
-set_grub
+# editor
+install_app "micro-editor"
+install_app "kate"
 
-# activate swap
-sudo zramswapon
+# required for desktop
+install_app "yakuake"
+install_app "plasma-vault"
+
+# tools
+install_app "dolphin"
+install_app "btop"
+install_app "syncthing"
+install_app "barrier"        # input leap
+install_app "zip"
+install_app "eza"
+install_app "gdu"
+install_app "xkill"
+install_app "mc"
+install_app "partitionmanager"
+install_app "lynis"
+
+# required for krusader
+install_app "krusader"
+install_app "arj"
+install_app "kget"
+install_app "kompare"
+install_app "krename"
+install_app "7zip"
+install_app "lha"
+install_app "unrar"
+install_app "unzip"
+install_app "zip"
+
+# development
+install_app "shfmt"
+install_app "ShellCheck"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ Apps from utilities ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+install_app "bat" "utilities"           # Better cat
+install_app "dust" "utilities"          # Better ncdu
+install_app "fastfetch" "utilities"
+install_app "trash-cli" "utilities"     # Saver rm
+install_app "fzf" "utilities"
+install_app "zoxide" "utilities"        # Better cd
+install_app "tealdeer" "utilities"
+install_app "multitail" "utilities"
+install_app "ripgrep" "utilities"       # Better grep
+
+install_app "opi" "utilities"			# opi
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ Apps from paulcarroty ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+install_app "codium" "gitlab.com_paulcarroty_vscodium_repo"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ Apps via opi ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+opi codecs                              # installs codecs from packman
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ Apps from packman ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+install_app "rar" "packman"             # required for krusader
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ Apps from flathub ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# browsers
+install_flatpak_user "org.mozilla.firefox"
+
+# system
+install_flatpak_user "com.github.tchx84.Flatseal"
+install_flatpak_user "org.cockpit_project.CockpitClient"
+
+# additional browser
+install_flatpak_user "io.github.ungoogled_software.ungoogled_chromium"
+
+# development
+#install_flatpak_user "com.vscodium.codium"
+
+# chat
+install_flatpak_user "org.signal.Signal"
+
+# passwords
+install_flatpak_user "org.keepassxc.KeePassXC"
+
+# backup
+install_flatpak_user "com.borgbase.Vorta"
+
+# encyption
+install_flatpak_user "org.cryptomator.Cryptomator"
+
+# audio & video
+install_flatpak_user "com.spotify.Client"
+install_flatpak_user "org.freac.freac"
+install_flatpak_user "org.musicbrainz.Picard"
+install_flatpak_user "org.videolan.VLC"
+
+# download
+install_flatpak_user "io.github.aandrew_me.ytdn"
+
+# youtube
+install_flatpak_user "io.freetubeapp.FreeTube"
+
+# note taking
+install_flatpak_user "md.obsidian.Obsidian"
+install_flatpak_user "com.logseq.Logseq"
+
+# GTK theme
+install_flatpak_user "org.gtk.Gtk3theme.Breeze"
+
+# KDE
+install_flatpak_user "org.kde.digikam"
+install_flatpak_user "org.kde.elisa"
+install_flatpak_user "org.kde.kcolorchooser"
+
+# KDE games
+install_flatpak_user "org.kde.kmahjongg"
+install_flatpak_user "org.kde.knights"
+
+# office
+install_flatpak_user "org.libreoffice.LibreOffice"
+
+# ebook
+install_flatpak_user "com.calibre_ebook.calibre"
+
+# tools
+install_flatpak_user "com.github.qarmin.czkawka"
+install_flatpak_user "org.kde.akregator"
+install_flatpak_user "org.kde.ark"
+install_flatpak_user "org.nmap.Zenmap"
+install_flatpak_user "org.remmina.Remmina"
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Config user ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -107,17 +226,10 @@ install_ollama
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Update  ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[[ -f "./core/system-update.sh" ]] && source "./core/system-update.sh"
+system_update
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Create snapshot POST ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-POST_ID=$(sudo snapper create --type post --pre-number "$PRE_ID" --print-number --description "End initial installation for k")
-
-if test $? -eq 0; then
-	log_message "INFO" "POST snapshot $POST_ID created successfully and linked to PRE-snapshot $PRE_ID"
-else
-	log_message "ERROR" "Error creating POST-snapshot"
-	exit 1
-fi
+create_post_snapshot
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ End ~~~~~~~~~~~~~~~~~~~~~~~~~~

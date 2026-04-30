@@ -131,8 +131,6 @@ install_firacode() {
 	fi
 }
 
-# https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip
-
 install_jetbrainsmono() {
 	log_message "-------" "Install font."
 

@@ -1,15 +1,21 @@
 #!/usr/bin/env bash
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ HEADER ~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# install-autofs.sh
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ Bash ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 set -euo pipefail # Safe bash scripting: exit on error, unset var, or pipe fail
 
-# -----------------------------------
-# installation
-# -----------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ installation ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 install_app "autofs"
 
-# -----------------------------------
-# configuration
-# -----------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ configuration ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 sudo cp /etc/auto.master /etc/auto.master.bak
 
@@ -32,8 +38,8 @@ muziek          -fstype=nfs,nofail,_netdev,defaults 10.10.30.20:/volume1/muziek
 muziekarchief   -fstype=nfs,nofail,_netdev,defaults 10.10.30.20:/volume1/muziekarchief
 EOF
 
-# -----------------------------------
-# start service
-# -----------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ start service ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 sudo systemctl enable --now autofs.service || log_message "ERROR" "Failed to enable autofs"
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ End ~~~~~~~~~~~~~~~~~~~~~~~~~~
