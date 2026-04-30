@@ -217,7 +217,7 @@ install_app "multitail" "utilities"
 install_app "ripgrep" "utilities"
 
 # from packman-essentials
-install_app "ffmpeg" "packman-essentials"
+install_app "ffmpeg-7" "packman-essentials"
 install_app "gstreamer-plugins-good" "packman-essentials"
 install_app "gstreamer-plugins-bad" "packman-essentials"
 install_app "gstreamer-plugins-ugly" "packman-essentials"

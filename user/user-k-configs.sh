@@ -1,148 +1,15 @@
 #!/usr/bin/env bash
-set -euo pipefail # Safe bash scripting: exit on error, unset var, or pipe fail
 
-# Create a timestamp for the log file name
-TIMESTAMP=$(date '+%Y-%m-%d-%H-%M-%S')
-LOGFILE="$HOME/install-03-${TIMESTAMP}.log"
+#
+# user-k-configs.sh
+#
 
-# ----------------------------------------
-# source distro and functions
-# ----------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ Bash ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-if [ -f ./core/system-functions.sh ]; then
+# Safe bash scripting 
+set -euo pipefail       # exit on error, unset var, or pipe fail
 
-	# source functions
-	source ./core/system-functions.sh
-
-	if test $? -eq 0; then
-		log_message "INFO" "Function sourced successfully"
-	else
-		log_message "ERROR" "Error sourcing functions"
-		exit 1
-	fi
-
-fi
-
-if [ -f /etc/os-release ]; then
-
-	# source release
-	source /etc/os-release
-
-	if test $? -eq 0; then
-		log_message "INFO" "Detected: '""$PRETTY_NAME""'"
-	else
-		log_message "ERROR" "Failed to detect openSUSE version"
-		exit 1
-	fi
-
-fi
-
-# ----------------------------------------
-# basis checks
-# ----------------------------------------
-
-check_sudo
-
-check_user_k
-
-# ----------------------------------------
-# add repositories
-# ----------------------------------------
-
-# add repository - flathub-user
-if [ -f ./repos/repo-add-flathub-user.sh ]; then
-
-	# source refresh
-	source ./repos/repo-add-flathub-user.sh
-
-	if test $? -eq 0; then
-		log_message "INFO" "repo-add-flathub-user.sh sourced successfully"
-	else
-		log_message "ERROR" "Failed to source file repo-add-flathub-user.sh"
-		exit 1
-	fi
-
-fi
-
-# ----------------------------------------
-# refresh repositories
-# ----------------------------------------
-
-if [ -f ./core/system-refresh.sh ]; then
-
-	# source refresh
-	source ./core/system-refresh.sh
-
-	if test $? -eq 0; then
-		log_message "INFO" "Refresh sourced successfully"
-	else
-		log_message "ERROR" "Error sourcing refresh"
-		exit 1
-	fi
-
-fi
-
-# -------------------------------------
-# install - flatpaks
-# -------------------------------------
-
-# system
-install_flatpak_user "com.github.tchx84.Flatseal"
-install_flatpak_user "org.cockpit_project.CockpitClient"
-
-# additional browser
-install_flatpak_user "io.github.ungoogled_software.ungoogled_chromium"
-
-# development
-install_flatpak_user "com.vscodium.codium"
-
-# chat
-install_flatpak_user "org.signal.Signal"
-
-# passwords
-install_flatpak_user "org.keepassxc.KeePassXC"
-
-# backup
-install_flatpak_user "com.borgbase.Vorta"
-
-# encyption
-install_flatpak_user "org.cryptomator.Cryptomator"
-
-# audio & video
-install_flatpak_user "com.spotify.Client"
-install_flatpak_user "org.freac.freac"
-install_flatpak_user "org.musicbrainz.Picard"
-install_flatpak_user "org.videolan.VLC"
-
-# download
-install_flatpak_user "io.github.aandrew_me.ytdn"
-
-# youtube
-install_flatpak_user "io.freetubeapp.FreeTube"
-
-# note taking
-install_flatpak_user "md.obsidian.Obsidian"
-install_flatpak_user "com.logseq.Logseq"
-
-# GTK theme
-install_flatpak_user "org.gtk.Gtk3theme.Breeze"
-
-# KDE
-install_flatpak_user "org.kde.digikam"
-install_flatpak_user "org.kde.elisa"
-install_flatpak_user "org.kde.kcolorchooser"
-
-# KDE games
-install_flatpak_user "org.kde.kmahjongg"
-install_flatpak_user "org.kde.knights"
-
-# office
-#install_flatpak_user "org.onlyoffice.desktopeditors"
-install_flatpak_user "org.libreoffice.LibreOffice"
-
-# -------------------------------------
-# config
-# -------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 create_directories() {
 	# required for k
@@ -243,6 +110,44 @@ install_firacode() {
 		# Change this URL to correspond with the correct font
 		FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip"
 		FONT_DIR="$HOME/.local/share/fonts"
+
+		# check if the file is accessible
+		if wget -q --spider "$FONT_URL"; then
+			TEMP_DIR=$(mktemp -d)
+			wget -q --show-progress $FONT_URL -O "$TEMP_DIR"/"${FONT_NAME}".zip
+			unzip "$TEMP_DIR"/"${FONT_NAME}".zip -d "$TEMP_DIR"
+			mkdir -p "$FONT_DIR"/"$FONT_NAME"
+			mv "${TEMP_DIR}"/*.ttf "$FONT_DIR"/"$FONT_NAME"
+
+			# Update the font cache
+			fc-cache -fv
+
+			# Delete the files created from this
+			rm -rf "${TEMP_DIR}"
+			log_message "INFO" "'$FONT_NAME' installed successfully."
+		else
+			log_message "ERROR" "Font '$FONT_NAME' not installed. Font URL is not accessible."
+		fi
+	fi
+}
+
+# https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip
+
+install_jetbrainsmono() {
+	log_message "-------" "Install font."
+
+	# Set font to 'JetBrainsMono Nerd Font'
+	FONT_NAME="JetBrainsMono Nerd Font"
+	FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip"
+	FONT_DIR="$HOME/.local/share/fonts"
+
+	if fc-list :family | grep -iq "$FONT_NAME"; then
+
+		log_message "INFO" "Font '$FONT_NAME' is installed."
+
+	else
+
+		log_message "INFO" "Installing font '$FONT_NAME'"
 
 		# check if the file is accessible
 		if wget -q --spider "$FONT_URL"; then
@@ -464,12 +369,19 @@ link_mounts() {
 
 }
 
-# run configs
-create_directories
-install_meslo
-install_firacode
-install_dotfiles
-stow_dotfiles
-install_projects
-install_mc_theme
-link_mounts
+install_ollama() {
+	log_message "-------" "Install Ollama."
+
+	# Download and install
+	curl -fsSL https://ollama.com/install.sh | sh
+
+	if test $? -eq 0; then
+		log_message "INFO" "Ollama installed successfully."
+	else
+		log_message "ERROR" "Ollama not installed."
+		exit 1
+	fi
+
+}
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~ End ~~~~~~~~~~~~~~~~~~~~~~~~~~
