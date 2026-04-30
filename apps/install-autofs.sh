@@ -17,6 +17,8 @@ install_app "autofs"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ configuration ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+if [[ ! -f "/etc/auto.master.bak" ]]; then
+
 sudo cp /etc/auto.master /etc/auto.master.bak
 
 sudo tee -a /etc/auto.master <<'EOF'
@@ -37,6 +39,8 @@ kluis           -fstype=nfs,nofail,_netdev,defaults 10.10.30.20:/volume1/kluis
 muziek          -fstype=nfs,nofail,_netdev,defaults 10.10.30.20:/volume1/muziek
 muziekarchief   -fstype=nfs,nofail,_netdev,defaults 10.10.30.20:/volume1/muziekarchief
 EOF
+
+if
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ start service ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
