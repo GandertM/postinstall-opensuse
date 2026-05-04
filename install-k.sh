@@ -210,7 +210,7 @@ install_flatpak_user "org.remmina.Remmina"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Config user ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[[ -f "./user/user-k-configs.sh" ]] && source "./user-k-configs.sh"
+[[ -f "./user/user-k-configs.sh" ]] && source "./user/user-k-configs.sh"
 
 # run configs
 create_directories
