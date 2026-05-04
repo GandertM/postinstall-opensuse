@@ -137,7 +137,11 @@ add_user() {
 	# Create the user
 	if [[ -n "$ID" ]]; then
 		
+		# add user
 		sudo useradd -m -u "$ID" -c "$comment" "$username"
+
+		# add user to group wheel
+		sudo usermod -a -G "wheel" "$username"
 
         # if test $? -eq 0; then
 		#     log_message "INFO" "Function sourced successfully"
@@ -148,7 +152,11 @@ add_user() {
 
 	else
 		
+		# add user
 		sudo useradd -m -c "$comment" "$username"
+
+		# add user to group wheel
+		sudo usermod -a -G "wheel" "$username"
 
 	fi
 
@@ -172,7 +180,7 @@ add_user() {
 	printf "User '%s' created successfully with comment '%s'.\n" "$username" "$comment"
 
 }
-
+q
 # Check sudo
 check_sudo() {
 	# Check if the user has sudo rights
