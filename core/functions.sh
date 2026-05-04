@@ -10,7 +10,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Bash ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Safe bash scripting 
-set -euo pipefail       # exit on error, unset var, or pipe fail
+# set -euo pipefail       # exit on error, unset var, or pipe fail
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Logs ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -26,12 +26,12 @@ log_message() {
 	NOW=$(date '+%Y-%m-%d %H:%M:%S')
 	printf "%s | %-8s | %s\n" "$NOW" "$LEVEL" "$MESSAGE" >>"$LOGFILE"
 
-	if test $? -eq 0; then
-		log_message "INFO" "Function logging successfully"
-	else
-		log_message "ERROR" "Error logging function"
-		exit 1
-	fi
+	# if test $? -eq 0; then
+	# 	log_message "INFO" "Function logging successfully"
+	# else
+	# 	log_message "ERROR" "Error logging function"
+	# 	exit 1
+	# fi
 }
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Outputs ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -90,10 +90,10 @@ text_color() {
 add_user() {
 
 	# Ensure script is run as root
-	if [[ "$(id -u)" -ne 0 ]]; then
-		printf 'This script must be run as root.\n' >&2
-		exit 1
-	fi
+	# if [[ "$(id -u)" -ne 0 ]]; then
+	# 	printf 'This script must be run as root.\n' >&2
+	# 	exit 1
+	# fi
 
 	# Ask for first name
 	read -r -p "Enter your first name: " firstname
@@ -136,17 +136,20 @@ add_user() {
 
 	# Create the user
 	if [[ -n "$ID" ]]; then
-		useradd -m -u "$ID" -c "$comment" "$username"
+		
+		sudo useradd -m -u "$ID" -c "$comment" "$username"
 
-        if test $? -eq 0; then
-		    log_message "INFO" "Function sourced successfully"
-	    else
-		    log_message "ERROR" "Error sourcing functions"
-		    exit 1
-	    fi
+        # if test $? -eq 0; then
+		#     log_message "INFO" "Function sourced successfully"
+	    # else
+		#     log_message "ERROR" "Error sourcing functions"
+		#     exit 1
+	    # fi
 
 	else
-		useradd -m -c "$comment" "$username"
+		
+		sudo useradd -m -c "$comment" "$username"
+
 	fi
 
     if test $? -eq 0; then
@@ -157,7 +160,7 @@ add_user() {
     fi
 
 	# Set the password
-	printf '%s:%s\n' "$username" "$password" | chpasswd
+	printf '%s:%s\n' "$username" "$password" | sudo chpasswd
 
     if test $? -eq 0; then
 	    log_message "INFO" "Adding password for user $username successfully"
