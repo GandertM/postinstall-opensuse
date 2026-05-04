@@ -7,7 +7,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Bash ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Safe bash scripting 
-set -euo pipefail       # exit on error, unset var, or pipe fail
+# set -euo pipefail       # exit on error, unset var, or pipe fail
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
