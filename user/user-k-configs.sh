@@ -10,8 +10,10 @@ create_directories() {
 	# required for k
 	DIR_LIST=(
 		".config/fastfetch"
+		".config/fresh"
 		".config/mc"
 		".config/starship"
+		".config/tealdeer"
 		".config/zsh"
 		".crd"
 		".ssh"
@@ -196,8 +198,10 @@ stow_dotfiles() {
 	# stow dotfiles from list
 	STOW_LIST=(
 		"fastfetch"
+		"fresh"
 		"mc"
 		"starship"
+		"tealdeer"
 		"zsh"
 		"vim"
 	)
