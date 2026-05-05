@@ -4,11 +4,6 @@
 # user-k-configs.sh
 #
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~ Bash ~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# Safe bash scripting 
-# set -euo pipefail       # exit on error, unset var, or pipe fail
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~  ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 create_directories() {
