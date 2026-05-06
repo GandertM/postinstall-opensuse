@@ -28,7 +28,7 @@ create_directories() {
 	)
 
 	# goto $HOME
-	cd "$HOME"
+	cd "$HOME" || return
 
 	# actual creation
 	for DIR in "${DIR_LIST[@]}"; do
@@ -168,7 +168,7 @@ install_dotfiles() {
 	log_message "-------" "Install projects."
 	local DIR_DOTS="$HOME/.dotfiles"
 
-	cd "$HOME"
+	cd "$HOME" || return
 
 	if [[ ! -d "$DIR_DOTS" ]]; then
 
@@ -208,7 +208,7 @@ stow_dotfiles() {
 
 	if [[ -d "$DIR_DOTS" ]]; then
 
-		cd "$DIR_DOTS"
+		cd "$DIR_DOTS" || return
 
 		# actual stowing
 		for APP in "${STOW_LIST[@]}"; do
@@ -232,26 +232,26 @@ stow_dotfiles() {
 
 	fi
 
-	cd "$HOME"
+	cd "$HOME" || return
 }
 
 install_projects() {
 	log_message "-------" "Install projects."
 	local DIR_PROJECTS="$HOME/projects"
 
-	cd "$HOME"
+	cd "$HOME" || return
 
 	if [[ ! -d "$DIR_PROJECTS" ]]; then
 
 		mkdir -p "$DIR_PROJECTS"
 
-		cd "$DIR_PROJECTS"
+		cd "$DIR_PROJECTS" || return
 
 		if [[ ! -d "$DIR_PROJECTS"/postinstall ]]; then
 
 			mkdir -p "$DIR_PROJECTS"/postinstall
 
-			cd "$DIR_PROJECTS"/postinstall
+			cd "$DIR_PROJECTS"/postinstall || return
 
 			git clone https://github.com/GandertM/postinstall.git
 
@@ -272,7 +272,7 @@ install_projects() {
 
 			mkdir -p "$DIR_PROJECTS"/postinstall-opensuse
 
-			cd "$DIR_PROJECTS"/postinstall-opensuse
+			cd "$DIR_PROJECTS"/postinstall-opensuse || return
 
 			git clone https://github.com/GandertM/postinstall-opensuse.git
 
@@ -295,7 +295,7 @@ install_projects() {
 
 	fi
 
-	cd "$HOME"
+	cd "$HOME" || return
 }
 
 install_mc_theme() {
@@ -303,7 +303,7 @@ install_mc_theme() {
 	local DIR_MC_THEME="$HOME/.local/share/mc/skins/"
 	local DIR_DOWNLOAD="$HOME/Downloads/mctheme"
 
-	cd "$HOME"
+	cd "$HOME" || return
 
 	if [[ ! -d "$DIR_MC_THEME" ]]; then
 
@@ -313,15 +313,15 @@ install_mc_theme() {
 			mkdir -p "$DIR_DOWNLOAD"
 		fi
 
-		cd "$DIR_DOWNLOAD"
+		cd "$DIR_DOWNLOAD" || return
 
 		git clone https://github.com/dracula/midnight-commander.git
 
-		cd "./midnight-commander/skins/"
+		cd "./midnight-commander/skins/" || return
 
 		cp ./*.ini "$DIR_MC_THEME"
 
-		cd "$HOME"
+		cd "$HOME" || return
 
 		log_message "INFO" "Midnight Commander theme installed successfully."
 
@@ -333,14 +333,14 @@ install_mc_theme() {
 
 	fi
 
-	cd "$HOME"
+	cd "$HOME" || return
 }
 
 link_mounts() {
 	log_message "-------" "Link mounts."
 	local DIR_LINKS="$HOME/data-on-nas"
 
-	cd "$HOME"
+	cd "$HOME" || return
 
 	if [[ ! -d "$DIR_LINKS" ]]; then
 

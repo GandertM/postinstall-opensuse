@@ -26,7 +26,7 @@ create_directories() {
 	)
 
 	# goto $HOME
-	cd "$HOME"
+	cd "$HOME" || return
 
 	# actual creation
 	for DIR in "${DIR_LIST[@]}"; do
@@ -168,7 +168,7 @@ install_dotfiles() {
 	log_message "-------" "Install projects."
 	local DIR_DOTS="$HOME/.dotfiles"
 
-	cd "$HOME"
+	cd "$HOME" || return
 
 	if [[ ! -d "$DIR_DOTS" ]]; then
 
@@ -206,7 +206,7 @@ stow_dotfiles() {
 
 	if [[ -d "$DIR_DOTS" ]]; then
 
-		cd "$DIR_DOTS"
+		cd "$DIR_DOTS" || return
 
 		# actual stowing
 		for APP in "${STOW_LIST[@]}"; do
@@ -230,14 +230,14 @@ stow_dotfiles() {
 
 	fi
 
-	cd "$HOME"
+	cd "$HOME" || return
 }
 
 link_mounts() {
 	log_message "-------" "Link mounts."
 	local DIR_LINKS="$HOME/data-on-nas"
 
-	cd "$HOME"
+	cd "$HOME" || return
 
 	if [[ ! -d "$DIR_LINKS" ]]; then
 
@@ -245,11 +245,11 @@ link_mounts() {
 
 		ln -s /mnt/nas/backup ~/data-on-nas/backup ||  log_message "ERROR" "Link backup not succesfull."
 		# ln -s /mnt/nas/film ~/data-on-nas/film ||  log_message "ERROR" "Link film not succesfull."
-		# ln -s /mnt/nas/foto ~/data-on-nas/foto ||  log_message "ERROR" "Link foto not succesfull."
+		ln -s /mnt/nas/foto ~/data-on-nas/foto ||  log_message "ERROR" "Link foto not succesfull."
 		ln -s /mnt/nas/gedeeld ~/data-on-nas/gedeeld ||  log_message "ERROR" "Link gedeeld not succesfull."
 		ln -s /mnt/nas/homenas ~/data-on-nas/homenas ||  log_message "ERROR" "Link homenas not succesfull."
 		ln -s /mnt/nas/kluis ~/data-on-nas/kluis ||  log_message "ERROR" "Link kluis not succesfull."
-		# ln -s /mnt/nas/muziek ~/data-on-nas/muziek ||  log_message "ERROR" "Link muziek not succesfull."
+		ln -s /mnt/nas/muziek ~/data-on-nas/muziek ||  log_message "ERROR" "Link muziek not succesfull."
 		# ln -s /mnt/nas/muziekarchief ~/data-on-nas/muziekarchief ||  log_message "ERROR" "Link muziekarchief not succesfull."
 		# ln -s /mnt/nas/dl-diskst ~/data-on-nas/dl-diskst ||  log_message "ERROR" "Link dl-diskst not succesfull."
 		# ln -s /mnt/nas/dl-bckupst ~/data-on-nas/dl-bckupst ||  log_message "ERROR" "Link dl-bckupst not succesfull."
