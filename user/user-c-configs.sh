@@ -62,7 +62,7 @@ install_meslo() {
 	#if fc-list :family | grep -iq "$FONT_NAME"; then
 	if [[ -d "$FONT_CHCK" ]]; then
 
-		log_message "INFO" "Font '$FONT_NAME' is installed."
+		log_message "INFO" "Font '$FONT_NAME' is already installed."
 
 	else
 
@@ -100,7 +100,7 @@ install_firacode() {
 	#if fc-list :family | grep -iq "$FONT_NAME"; then
 	if [[ -d "$FONT_CHCK" ]]; then
 	
-		log_message "INFO" "Font '$FONT_NAME' is installed."
+		log_message "INFO" "Font '$FONT_NAME' is already installed."
 
 	else
 
@@ -140,7 +140,7 @@ install_jetbrainsmono() {
 	#if fc-list :family | grep -iq "$FONT_NAME"; then
 	if [[ -d "$FONT_CHCK" ]]; then
 
-		log_message "INFO" "Font '$FONT_NAME' is installed."
+		log_message "INFO" "Font '$FONT_NAME' is already installed."
 
 	else
 
