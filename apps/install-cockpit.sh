@@ -1,8 +1,28 @@
 #!/usr/bin/env bash
-# set -euo pipefail # Safe bash scripting: exit on error, unset var, or pipe fail
 
 # -----------------------------------
-# installing an application
+# renoving busybox-hostname is exists
+# -----------------------------------
+
+if app_exists "busybox-hostname"; then
+    
+    sudo zypper --non-interactive remove busybox-hostname
+    
+    if test $? -eq 0; then
+	    log_message "REMOVE" "busybox-hostname removed successfully."
+	else
+		log_message "ERROR" "Failed to remove busybox-hostname."
+		exit 1
+	fi
+
+else
+
+    log_message "INFO" "busybox-hostname not present on system."
+
+fi
+
+# -----------------------------------
+# installing cockpit
 # -----------------------------------
 
 install_app_interactive "cockpit"

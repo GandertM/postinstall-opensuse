@@ -51,6 +51,9 @@ install_app "flatpak"
 # install autofs
 [[ -f "./apps/install-autofs.sh" ]] && source "./apps/install-autofs.sh"
 
+# install cockpit
+[[ -f "./apps/install-cockpit.sh" ]] && source "./apps/install-cockpit.sh"
+
 # install swap
 [[ -f "./apps/install-swap.sh" ]] && source "./apps/install-swap.sh"
 
