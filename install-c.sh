@@ -81,7 +81,7 @@ install_flatpak_user "com.calibre_ebook.calibre"
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Config user ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[[ -f "./user/user-c-configs.sh" ]] && source "./user-c-configs.sh"
+[[ -f "./user/user-c-configs.sh" ]] && source "./user/user-c-configs.sh"
 
 # run configs
 create_directories
@@ -91,7 +91,7 @@ install_dotfiles
 stow_dotfiles
 install_projects
 #install_mc_theme
-#link_mounts
+link_mounts
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ Create snapshot POST ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
