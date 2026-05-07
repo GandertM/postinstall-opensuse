@@ -87,9 +87,10 @@ install_flatpak_user "com.calibre_ebook.calibre"
 create_directories
 install_meslo
 install_firacode
+install_jetbrainsmono
 install_dotfiles
 stow_dotfiles
-install_projects
+#install_projects
 #install_mc_theme
 link_mounts
 

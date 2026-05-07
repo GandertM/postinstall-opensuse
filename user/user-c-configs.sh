@@ -54,19 +54,19 @@ install_meslo() {
 	log_message "-------" "Install font."
 
 	# Install font 'MesloLGSDZ Nerd Font 13pt' of 'MesloLGS Nerd Font Mono'
-	FONT_NAME="MesloLGS Nerd Font Mono"
+	FONT_NAME="Meslo Nerd Font"
+	FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip"
+	FONT_DIR="$HOME/.local/share/fonts"
+	FONT_CHCK="$FONT_DIR"/"$FONT_NAME"
 
-	if fc-list :family | grep -iq "$FONT_NAME"; then
+	#if fc-list :family | grep -iq "$FONT_NAME"; then
+	if [[ -d "$FONT_CHCK" ]]; then
 
 		log_message "INFO" "Font '$FONT_NAME' is installed."
 
 	else
 
 		log_message "INFO" "Installing font '$FONT_NAME'"
-
-		# Change this URL to correspond with the correct font
-		FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip"
-		FONT_DIR="$HOME/.local/share/fonts"
 
 		# check if the file is accessible
 		if wget -q --spider "$FONT_URL"; then
@@ -93,18 +93,18 @@ install_firacode() {
 
 	# Install font 'FiraCode Nerd Font'
 	FONT_NAME="FiraCode Nerd Font"
+	FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip"
+	FONT_DIR="$HOME/.local/share/fonts"
+	FONT_CHCK="$FONT_DIR"/"$FONT_NAME"
 
-	if fc-list :family | grep -iq "$FONT_NAME"; then
-
+	#if fc-list :family | grep -iq "$FONT_NAME"; then
+	if [[ -d "$FONT_CHCK" ]]; then
+	
 		log_message "INFO" "Font '$FONT_NAME' is installed."
 
 	else
 
 		log_message "INFO" "Installing font '$FONT_NAME'"
-
-		# Change this URL to correspond with the correct font
-		FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip"
-		FONT_DIR="$HOME/.local/share/fonts"
 
 		# check if the file is accessible
 		if wget -q --spider "$FONT_URL"; then
@@ -135,8 +135,10 @@ install_jetbrainsmono() {
 	FONT_NAME="JetBrainsMono Nerd Font"
 	FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/JetBrainsMono.zip"
 	FONT_DIR="$HOME/.local/share/fonts"
+	FONT_CHCK="$FONT_DIR"/"$FONT_NAME"
 
-	if fc-list :family | grep -iq "$FONT_NAME"; then
+	#if fc-list :family | grep -iq "$FONT_NAME"; then
+	if [[ -d "$FONT_CHCK" ]]; then
 
 		log_message "INFO" "Font '$FONT_NAME' is installed."
 
