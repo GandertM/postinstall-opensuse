@@ -180,7 +180,7 @@ add_user() {
 	printf "User '%s' created successfully with comment '%s'.\n" "$username" "$comment"
 
 }
-q
+
 # Check sudo
 check_sudo() {
 	# Check if the user has sudo rights
