@@ -49,7 +49,6 @@ create_directories() {
 		fi
 
 	done
-
 }
 
 install_meslo() {
@@ -190,7 +189,6 @@ install_dotfiles() {
 		log_message "INFO" "Config files already installed."
 
 	fi
-
 }
 
 stow_dotfiles() {
@@ -365,7 +363,6 @@ link_mounts() {
 		log_message "INFO" "Links for mounts already set."
 
 	fi
-
 }
 
 install_ollama() {
@@ -380,7 +377,6 @@ install_ollama() {
 		log_message "ERROR" "Ollama not installed."
 		exit 1
 	fi
-
 }
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~ End ~~~~~~~~~~~~~~~~~~~~~~~~~~
