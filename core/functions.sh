@@ -201,9 +201,11 @@ check_user_b() {
 
 	# Check if it equals 'b'
 	if [[ "$FIRST_LETTER" == "$BASE_LETTER" ]]; then
-		echo "The username starts with '""$BASE_LETTER""'."
+		#echo "The username starts with '""$BASE_LETTER""'."
+		echo "The username starts with '$BASE_LETTER'."
 	else
-		echo "You are using the wrong user. The username should start with '""$BASE_LETTER""'."
+		#echo "You are using the wrong user. The username should start with '""$BASE_LETTER""'."
+		echo "You are using the wrong user. The username should start with '$BASE_LETTER'."
 		exit 1
 	fi
 }
@@ -219,9 +221,11 @@ check_user_k() {
 
 	# Check if it equals 'b'
 	if [[ "$FIRST_LETTER" == "$BASE_LETTER" ]]; then
-		echo "The username starts with '""$BASE_LETTER""'."
+		#echo "The username starts with '""$BASE_LETTER""'."
+		echo "The username starts with '$BASE_LETTER'."
 	else
-		echo "You are using the wrong user. The username should start with '""$BASE_LETTER""'."
+		#echo "You are using the wrong user. The username should start with '""$BASE_LETTER""'."
+		echo "You are using the wrong user. The username should start with '$BASE_LETTER'."
 		exit 1
 	fi
 }
@@ -237,9 +241,11 @@ check_user_c() {
 
 	# Check if it equals 'b'
 	if [[ "$FIRST_LETTER" == "$BASE_LETTER" ]]; then
-		echo "The username starts with '""$BASE_LETTER""'."
+		#echo "The username starts with '""$BASE_LETTER""'."
+		echo "The username starts with '$BASE_LETTER'."
 	else
-		echo "You are using the wrong user. The username should start with '""$BASE_LETTER""'."
+		#echo "You are using the wrong user. The username should start with '""$BASE_LETTER""'."
+		echo "You are using the wrong user. The username should start with '$BASE_LETTER'."
 		exit 1
 	fi
 }
